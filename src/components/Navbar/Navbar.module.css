@@ -1,0 +1,22 @@
+.nav {
+    grid-area: n;
+    background-color: lightsalmon;
+}
+
+.item a{
+    color: white;
+    text-decoration: none;
+}
+
+.item a.active{
+    color: goldenrod;
+}
+
+.friends {
+    width: 70px;
+    margin-top: 20px;
+    text-align: center;
+    padding: 4px;
+    color: tomato;
+    border: 1px solid sienna;
+}
