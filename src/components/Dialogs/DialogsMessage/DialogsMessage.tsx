@@ -7,11 +7,11 @@ export type DialogMessagePropsType = {
     message: string
 }
 
-function DialogMessgae(props: DialogMessagePropsType) {
+function DialogMessage(props: DialogMessagePropsType) {
 
     return (<div className={s.message}>
         {props.message}
     </div>)
 }
 
-export default DialogMessgae;
+export default DialogMessage;
