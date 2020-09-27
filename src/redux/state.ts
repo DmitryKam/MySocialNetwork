@@ -1,5 +1,5 @@
-import profileReducer from './profile-reducer';
-import dialogsReducer from './dialogs-reducer';
+import profileReducer, {addPostAC, updateNewMessageTextAC} from './profile-reducer';
+import dialogsReducer, {changeNewTextAC, sendMessageAC} from './dialogs-reducer';
 import sidebarReducer from './sidebar-reducer';
 
 export type MessageType = {
@@ -38,10 +38,7 @@ export type StoreType = {
     getState: ()=> RootStateType
     dispatch:(action:ActionsTypes)=>void
 }
-const ADD_POST = "ADD-POST";
-const CHANGE_NEW_TEXT = "CHANGE-NEW-TEXT"
-const UPDATE_NEW_MESSAGE_BODY = "UPDATE-NEW-MESSAGE-BODY";
-const SEND_MESSAGE = "SEND-MESSAGE";
+
 
 export type ActionsTypes = ReturnType<typeof addPostAC>
     | ReturnType<typeof changeNewTextAC>
@@ -49,33 +46,7 @@ export type ActionsTypes = ReturnType<typeof addPostAC>
     | ReturnType<typeof sendMessageAC>
 
 
-export const addPostAC = (postText: string)=>{
-    return{
-        type:ADD_POST,
-        postText:postText
-    } as const
-}
 
-    export const changeNewTextAC = (newMessageBody:string) => {
-    return{
-        type:UPDATE_NEW_MESSAGE_BODY,
-        newMessageBody:newMessageBody
-    } as const
-}
-
-export const updateNewMessageTextAC = (newText:string) => {
-    return {
-        type: CHANGE_NEW_TEXT,
-        newText: newText
-    } as const
-}
-
-export const sendMessageAC = (sendMessage:string) => {
-    return {
-        type: SEND_MESSAGE,
-        sendMessage: sendMessage
-    } as const
-}
 
 const store: StoreType = {
     _state: {
@@ -118,40 +89,14 @@ const store: StoreType = {
         this._onChange = observer
     },
 
-    dispatch(action){
+    dispatch(action) {
 
-       this._state.profilePage = profileReducer(this._state.profilePage, action);
-       this._state.dialogPage = dialogsReducer(this._state.dialogPage, action);
-       this._state.sidebar = sidebarReducer(this._state.sidebar,action);
+        this._state.profilePage = profileReducer(this._state.profilePage, action);
+        this._state.dialogPage = dialogsReducer(this._state.dialogPage, action);
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action);
 
-       this._onChange();
-
-/*
-        if(action.type ===ADD_POST){
-            const newPost: PostType = {
-                id: new Date().getTime(),
-                message: action.postText,
-                likesCount: '0'
-            }
-            this._state.profilePage.posts.push(newPost);
-            this._state.profilePage.newPostText = '';
-            this._onChange()
-        } else if(action.type ===CHANGE_NEW_TEXT){
-            this._state.profilePage.newPostText = action.newText
-            this._onChange()
-        } else if(action.type===UPDATE_NEW_MESSAGE_BODY){
-            this._state.dialogPage.newMessageBody = action.newMessageBody
-            this._onChange()
-        } else if(action.type===SEND_MESSAGE) {
-            const body: MessageType = {
-                id: new Date().getTime(),
-                message: action.sendMessage
-            }
-            this._state.dialogPage.messages.push(body)
-            this._state.dialogPage.newMessageBody = '';
-            this._onChange();
-        }
-*/
+        this._onChange();
     }
 }
+
 export default store;

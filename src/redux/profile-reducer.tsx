@@ -4,6 +4,20 @@ const ADD_POST = 'ADD-POST';
 const CHANGE_NEW_TEXT = 'CHANGE-NEW-TEXT';
 
 
+export const addPostAC = (postText: string)=>{
+    return{
+        type:ADD_POST,
+        postText:postText
+    } as const
+}
+
+export const updateNewMessageTextAC = (newText:string) => {
+    return {
+        type: CHANGE_NEW_TEXT,
+        newText: newText
+    } as const
+}
+
 const profileReducer = (state: ProfilePageType, action: ActionsTypes) => {
     switch (action.type) {
         case ADD_POST:
@@ -23,5 +37,7 @@ const profileReducer = (state: ProfilePageType, action: ActionsTypes) => {
     }
 
 }
+
+
 
 export default profileReducer;
