@@ -12,13 +12,13 @@ type ProfilePostType = {
 }
 
 
-function Profile(props: ProfilePostType) {
+function Profile() {
 
     return (
         <div className={'content'}>
             <ProfileInfo/>
             <MyPostsContainer
-                store={props.store}
+                /*store={props.store}*/
             />
 
         </div>

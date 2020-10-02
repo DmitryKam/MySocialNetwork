@@ -17,18 +17,20 @@ export type AppPropsType = {
     store: StoreReduxType
 }
 
-const App: React.FC<AppPropsType> = (props) => {
-    const store = props.store.getState();
+const App: React.FC/*<AppPropsType>*/ = () => {
+    /*const store = props.store.getState();*/
     return (
         <div className={'app-wrapper'}>
             <Header/>
-            <Navbar friends={store.dialogPage.dialogs}/>
+            <Navbar
+                /*friends={store.dialogPage.dialogs}*/
+            />
             <div className={'app-wrapper-content'}>
                 <Route path={'/profile'} render={() => <Profile
-                    store={props.store}
+                    /*store={props.store}*/
                 />}/>
                 <Route path={'/messages'} render={() => <DialogsContainer
-                    store={props.store}
+                    /*store={props.store}*/
                 />}/>
                 <Route path={'/news'} render={() => <News/>}/>
                 <Route path={'/music'} render={() => <Music/>}/>

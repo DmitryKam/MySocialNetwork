@@ -3,35 +3,33 @@ import {ActionsTypes} from '../../../redux/store';
 import {addPostAC, ProfilePageType, updateNewMessageTextAC} from '../../../redux/profile-reducer';
 import MyPosts from './MyPosts';
 import {StoreReduxType} from '../../../redux/redux-store';
+import StoreContext from '../../../StoreContext';
 
 
+function MyPostsContainer() {
+    return (
+        <StoreContext.Consumer>{
+            (store)=> {
 
-type MyPostsPropsType = {
-    store:StoreReduxType
-}
-
-
-function MyPostsContainer(props: MyPostsPropsType) {
-
-    let store = props.store.getState()
-    let dispatchs = props.store.dispatch
-
-    let addPosts = () => {
-        if(store.profilePage.newPostText) {
-           dispatchs(addPostAC(store.profilePage.newPostText))
-        }
-    }
-
-    const onChangeText = (text:string)=>{
-      dispatchs(updateNewMessageTextAC(text))
-    }
-
-
-    return (<MyPosts
-            onChangeText = {onChangeText}
-            addPosts={addPosts}
-            posts={store.profilePage.posts}
-            newPostText={store.profilePage.newPostText}/>
+                //let state = store.getState() ;
+                let dispatchs = store.dispatch
+                let addPosts = () => {
+                    if (store.getState().profilePage.newPostText) {
+                        dispatchs(addPostAC(store.getState().profilePage.newPostText))
+                    }
+                }
+                const onChangeText = (text: string) => {
+                    dispatchs(updateNewMessageTextAC(text))
+                }
+                return(
+            <MyPosts
+                onChangeText={onChangeText}
+                addPosts={addPosts}
+                posts={store.getState().profilePage.posts}
+                newPostText={store.getState().profilePage.newPostText}/>
+                )}
+            }
+        </StoreContext.Consumer>
     );
 }
 
