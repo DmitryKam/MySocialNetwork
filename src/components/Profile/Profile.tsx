@@ -1,20 +1,14 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import s from './Profile/Profile.module.css'
 import ProfileInfo from './ProfileInfo/ProfileInfo';
-import MyPosts from './MyPosts/MyPosts';
-import {ActionsTypes} from '../../redux/state';
+import {ActionsTypes} from '../../redux/store';
+import MyPostsContainer from './MyPosts/MyPostsContainer';
+import {PostType, ProfilePageType} from '../../redux/profile-reducer';
+import {StoreReduxType} from '../../redux/redux-store';
 
-
-export type ArrayPostType = {
-    id: number
-    message: string
-    likesCount: string
-}
 
 type ProfilePostType = {
-    posts: Array<ArrayPostType>
-    newPostText:string
-    dispatch: (action:ActionsTypes)=>void
+    store: StoreReduxType
 }
 
 
@@ -23,10 +17,8 @@ function Profile(props: ProfilePostType) {
     return (
         <div className={'content'}>
             <ProfileInfo/>
-            <MyPosts
-                posts={props.posts}
-                newPostText ={props.newPostText}
-                dispatch={props.dispatch}
+            <MyPostsContainer
+                store={props.store}
             />
 
         </div>

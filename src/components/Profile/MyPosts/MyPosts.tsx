@@ -1,16 +1,15 @@
 import React, {ChangeEvent, useState} from 'react';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
-import {ActionsTypes} from '../../../redux/state';
-import {ArrayPostType} from '../Profile';
-import {addPostAC, updateNewMessageTextAC} from '../../../redux/profile-reducer';
+import {PostType} from '../../../redux/profile-reducer';
 
 
 
 type MyPostsPropsType = {
-    posts: Array<ArrayPostType>
+    posts: Array<PostType>
     newPostText:string
-    dispatch: (action:ActionsTypes)=>void
+    onChangeText:(text:string)=>void
+    addPosts:()=>void
 }
 
 
@@ -18,15 +17,17 @@ function MyPosts(props: MyPostsPropsType) {
 
     let postElement = props.posts.map(p => <Post message={p.message} likesCount={p.likesCount}/>)
 
-    let addPosts = () => {
+let onAddPosts = () => {
         if(props.newPostText) {
-            props.dispatch(addPostAC(props.newPostText))
+            props.addPosts();
         }
     }
 
     const onChangeText = (e:ChangeEvent<HTMLTextAreaElement>)=>{
-        props.dispatch(updateNewMessageTextAC(e.currentTarget.value))
+        let text = (e.currentTarget.value)
+        props.onChangeText(text)
     }
+
 
     return (<div className={s.postsBock}>
             my posts
@@ -38,7 +39,7 @@ function MyPosts(props: MyPostsPropsType) {
                         placeholder={'Enter your post'}
                     />
                 </div>
-                <button onClick={addPosts}>Add posts</button>
+                <button onClick={onAddPosts}>Add posts</button>
             </div>
             <div className={s.posts}>
                 {postElement}
