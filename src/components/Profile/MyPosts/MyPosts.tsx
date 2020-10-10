@@ -9,17 +9,17 @@ type MyPostsPropsType = {
     posts: Array<PostType>
     newPostText:string
     onChangeText:(text:string)=>void
-    addPosts:()=>void
+    addPosts:(text:string)=>void
 }
 
 
 function MyPosts(props: MyPostsPropsType) {
 
-    let postElement = props.posts.map(p => <Post message={p.message} likesCount={p.likesCount}/>)
+    let postElement = props.posts.map(p => <Post key={p.id} message={p.message} likesCount={p.likesCount}/>)
 
 let onAddPosts = () => {
         if(props.newPostText) {
-            props.addPosts();
+            props.addPosts(props.newPostText);
         }
     }
 
