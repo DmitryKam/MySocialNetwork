@@ -15,11 +15,11 @@ let mapStateToProps = (state: RootState) => {
 let mapDispatchToProps = (dispatch: Dispatch<ActionsTypes>) => {
 
     return {
-        onChangeText: (text:string) => {
+        onChangeText: (text: string) => {
             debugger;
             dispatch(updateNewMessageTextAC(text));
         },
-        addPosts: (text:string) => {
+        addPosts: (text: string) => {
             debugger;
             dispatch(addPostAC(text))// Не получается закинуть текст
 
