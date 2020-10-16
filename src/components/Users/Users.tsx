@@ -12,23 +12,23 @@ type UsersPropsType = {
 
 }
 
+class Users extends React.Component<UsersPropsType> {
 
-function Users(props: UsersPropsType) {
-    if (props.users.length === 0) {
-        axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response => {
+    constructor(props:UsersPropsType) {    //????
+        super(props);
+        axios.get('https://social-network.samuraijs.com/api/1.0/users')
+            .then(response => {
             debugger;
-            props.setUsers(response.data.items);
+            this.props.setUsers(response.data.items);
         });
-
-
     }
 
-
-    return (
-        <div>
-            {
-                props.users.map(u => <div key={u.id}>
-            <span>
+    render() {
+        return (
+            <div>
+                {
+                    this.props.users.map(u => <div key={u.id}>
+                        <span>
                 <div>
                     <img
                         src={u.photos.small != null
@@ -39,16 +39,16 @@ function Users(props: UsersPropsType) {
                 <div>
                     {u.followed
                         ? <button onClick={() => {
-                            props.unFollow(u.id)
+                            this.props.unFollow(u.id)
                         }}>Unfollow</button>
                         : <button onClick={() => {
-                            props.follow(u.id)
+                            this.props.follow(u.id)
                         }}> Follow</button>
                     }
 
                 </div>
             </span>
-                    <span>
+                        <span>
                  <span>
                      <div>{u.name}</div>
                      <div>{u.status}</div>
@@ -58,10 +58,13 @@ function Users(props: UsersPropsType) {
                      <div>{'u.location.city'}</div>
                  </span>
                 </span>
-                </div>)
-            }
-        </div>
-    )
+                    </div>)
+                }
+            </div>
+        )
+    }
+
+
 }
 
 export default Users;
