@@ -2,6 +2,7 @@ import React, {ChangeEvent, useState} from 'react';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
 import {PostType} from '../../../redux/profile-reducer';
+import {UsersPageType} from '../../../redux/users-reducer';
 
 
 
@@ -10,6 +11,7 @@ type MyPostsPropsType = {
     newPostText:string
     onChangeText:(text:string)=>void
     addPosts:(text:string)=>void
+
 }
 
 
