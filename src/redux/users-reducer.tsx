@@ -5,6 +5,7 @@ const UNFOLLOW = 'UNFOLLOW';
 const SETUSERS = 'SET_USERS';
 const SETCURRENTPAGE = 'SET_CURRENT_PAGE'
 const TOTALUSERSCOUNT = 'TOTALUSERSCOUNT'
+const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 
 
 type LocationType = {
@@ -30,12 +31,14 @@ export type UsersPageType = {
     pageSize: number,
     totalUsersCount: number,
     currentPage: number,
+    isFetching:boolean
 }
 let initialState: UsersPageType = {
     users: [],
     pageSize: 20,
     totalUsersCount: 0,
     currentPage: 2,
+    isFetching: false
 }
 
 const usersReducer = (state = initialState, action: ActionsTypes) => {
@@ -75,6 +78,12 @@ const usersReducer = (state = initialState, action: ActionsTypes) => {
                 ...state,
                 totalUsersCount: action.totalUsersCount,
             }
+        case 'TOGGLE_IS_FETCHING':
+            return {
+                ...state,
+                isFetching: action.isFetching
+            }
+
 
         default:
             return state;
@@ -117,5 +126,13 @@ export const setTotalUsersCountAC = (totalUsersCount:number) => {
 
     } as const
 }
+export const toggleisFetchingAC = (isFetching:boolean) => {
+    return {
+        type: TOGGLE_IS_FETCHING,
+        isFetching
+
+    } as const
+}
+
 
 export default usersReducer;
