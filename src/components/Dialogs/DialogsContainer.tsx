@@ -4,7 +4,7 @@ import Dialogs from './Dialogs';
 import {RootState} from '../../redux/redux-store';
 import {connect} from 'react-redux';
 import {Dispatch} from 'redux';
-import {ActionsTypes} from '../../redux/store';
+import {ActionsTypes} from '../../redux/redux-store';
 
 
 let mapStateToProps = (state:RootState) => {

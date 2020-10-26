@@ -1,5 +1,5 @@
 import React, {Dispatch} from 'react';
-import store, {ActionsTypes} from '../../../redux/store';
+import store, {ActionsTypes} from '../../../redux/redux-store';
 import {addPostAC, updateNewMessageTextAC} from '../../../redux/profile-reducer';
 import MyPosts from './MyPosts';
 import {RootState} from '../../../redux/redux-store';

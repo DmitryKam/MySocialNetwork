@@ -1,7 +1,6 @@
-import React, {Dispatch} from 'react';
-import {connect} from 'react-redux';
+import React from 'react';
+import {connect, MapStateToProps} from 'react-redux';
 import {RootState} from '../../redux/redux-store';
-import {ActionsTypes} from '../../redux/store';
 import {
     setCurrentPage,
     follow,
@@ -14,21 +13,35 @@ import axios from 'axios';
 import Users from './Users';
 import Preloader from '../../common/Preloader/Preloader';
 
-type UsersAPIPropsType = {
+type StateType = {
+
+}
+
+type OwnPropsType = {
+
+}
+
+type mapStatePropsType = {
     users: UsersType[]
+    pageSize: number
+    totalUsersCount: number
+    currentPage: number
+    isFetching:boolean
+}
+
+type mapDispatchPropsType = {
     follow: (userId: number) => void
     unFollow: (userId: number) => void
     setUsers: (users: UsersType[]) => void
     setCurrentPage: (currentPage: number) => void
     setTotalUsersCount: (totalCount: number) => void
-    pageSize: number
-    totalUsersCount: number
-    currentPage: number
-    isFetching:boolean
     toggleisFetching: (isFetching:boolean)=>void
+
 }
 
-class UsersComponent extends React.Component<UsersAPIPropsType> {
+
+type PropsType = OwnPropsType & mapStatePropsType & mapDispatchPropsType
+class UsersComponent extends React.Component<PropsType, StateType> {
 
     componentDidMount(): void {
         this.props.toggleisFetching(true);
@@ -75,7 +88,7 @@ class UsersComponent extends React.Component<UsersAPIPropsType> {
 }
 
 
-let mapStateToProps = (state: RootState) => {
+let mapStateToProps = (state: RootState):mapStatePropsType => {
     return {
         users: state.usersPage.users,
         pageSize: state.usersPage.pageSize,
@@ -86,7 +99,7 @@ let mapStateToProps = (state: RootState) => {
 }
 
 
-const UsersContainer = connect(mapStateToProps, {
+const UsersContainer = connect<mapStatePropsType,mapDispatchPropsType,OwnPropsType,RootState>(mapStateToProps, {
         follow,
         unFollow,
         setUsers,

@@ -1,4 +1,4 @@
-import {ActionsTypes} from './store';
+import {ActionsTypes} from './redux-store';
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
@@ -16,8 +16,8 @@ type LocationType = {
 type PhotosType = {
     small: string
     large: string
-
 }
+
 export type UsersType = {
     id: number
     photos: PhotosType,
@@ -41,7 +41,7 @@ let initialState: UsersPageType = {
     isFetching: false
 }
 
-const usersReducer = (state = initialState, action: ActionsTypes) => {
+const usersReducer = (state = initialState, action: ActionsTypes):UsersPageType => {
     switch (action.type) {
         case 'FOLLOW':
             return {

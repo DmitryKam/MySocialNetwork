@@ -1,7 +1,8 @@
-import profileReducer, {addPostAC, updateNewMessageTextAC} from './profile-reducer';
+import profileReducer, {addPostAC, setUsersProfile, updateNewMessageTextAC} from './profile-reducer';
 import dialogsReducer, {changeNewTextAC, sendMessageAC} from './dialogs-reducer';
 import sidebarReducer from './sidebar-reducer';
 import {follow, setCurrentPage, toggleisFetching, setTotalUsersCount, setUsers, unFollow} from './users-reducer';
+import {ActionsTypes} from './redux-store';
 
 export type MessageType = {
     id: number
@@ -20,6 +21,7 @@ export type SidebarType = {}
 export type ProfilePageType = {
     posts: Array<PostType>
     newPostText: string
+    profile: any // Добавил
 }
 export type DialogsPageType = {
     dialogs: Array<DialogType>
@@ -41,19 +43,6 @@ export type StoreType = {
 }
 
 
-export type ActionsTypes = ReturnType<typeof addPostAC>
-    | ReturnType<typeof changeNewTextAC>
-    | ReturnType<typeof updateNewMessageTextAC>
-    | ReturnType<typeof sendMessageAC>
-    | ReturnType<typeof follow>
-    | ReturnType<typeof unFollow>
-    | ReturnType<typeof setUsers>
-    | ReturnType<typeof setCurrentPage>
-    | ReturnType<typeof setTotalUsersCount>
-    | ReturnType<typeof toggleisFetching>
-
-
-
 const store: StoreType = {
     _state: {
         profilePage: {
@@ -63,7 +52,8 @@ const store: StoreType = {
                 {id: 3, message: 'My message about me?', likesCount: '15'},
                 {id: 4, message: 'My message about me?', likesCount: '17'},
             ],
-            newPostText: ''
+            newPostText: '',
+            profile: null //add
         },
         dialogPage: {
             dialogs: [
@@ -105,4 +95,4 @@ const store: StoreType = {
     }
 }
 
-export default store;
+export default 1;

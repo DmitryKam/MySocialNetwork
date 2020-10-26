@@ -11,6 +11,7 @@ import {StoreType} from './redux/store';
 import {StoreReduxType} from './redux/redux-store';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import UsersContainer from './components/Users/UsersContainer';
+import ProfileContainer from './components/Profile/ProfileContainer';
 
 
 export type AppPropsType = {
@@ -26,7 +27,7 @@ const App: React.FC/*<AppPropsType>*/ = () => {
                 /*friends={store.dialogPage.dialogs}*/
             />
             <div className={'app-wrapper-content'}>
-                <Route path={'/profile'} render={() => <Profile
+                <Route path={'/profile/:userId?'} render={() => <ProfileContainer
                     /*store={props.store}*/
                 />}/>
                 <Route path={'/messages'} render={() => <DialogsContainer
