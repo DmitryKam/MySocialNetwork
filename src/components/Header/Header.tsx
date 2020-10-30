@@ -1,11 +1,23 @@
 import React from 'react';
-import k from './Header.module.css';
+import s from './Header.module.css';
+import {NavLink} from 'react-router-dom';
+import {AuthType} from '../../redux/auth-reducer';
 
-function Header() {
+type HeaderPropsType = {
+    auth: any
+}
 
+
+function Header(props:HeaderPropsType) {
     return(
-        <header className={k.header}>
+        <header className={s.header}>
             <img src={'https://d2pye4zfc3qqup.cloudfront.net/wp-content/uploads/2016/11/10100802/Header-Immage-Moon-Rover.png'}/>
+        <div className={s.loginBlock}>
+            {props.auth.isAuth
+                ? props.auth.login
+                :<NavLink to={'/login'}>Login</NavLink>}
+        </div>
+            <div ></div>
         </header>
     );
 }

@@ -12,6 +12,7 @@ import {StoreReduxType} from './redux/redux-store';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
+import HeaderContainer from './components/Header/HeaderContainer';
 
 
 export type AppPropsType = {
@@ -22,7 +23,7 @@ const App: React.FC/*<AppPropsType>*/ = () => {
     /*const store = props.store.getState();*/
     return (
         <div className={'app-wrapper'}>
-            <Header/>
+            <HeaderContainer/>
             <Navbar
                 /*friends={store.dialogPage.dialogs}*/
             />
