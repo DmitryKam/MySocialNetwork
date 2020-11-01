@@ -7,7 +7,7 @@ import usersReducer, {
     setCurrentPage,
     setTotalUsersCount,
     setUsers,
-    toggleisFetching,
+    toggleisFetching, toggleIsFollowingProgress,
     unFollow
 } from './users-reducer';
 import {authReducer, setAuthUserData} from './auth-reducer';
@@ -25,13 +25,14 @@ export type ActionsTypes = ReturnType<typeof addPostAC>
     | ReturnType<typeof toggleisFetching>
     | ReturnType<typeof setUsersProfile>
     | ReturnType<typeof setAuthUserData>
+    | ReturnType<typeof toggleIsFollowingProgress>
 
 
 let reducers = combineReducers({
     profilePage: profileReducer,
     dialogPage: dialogsReducer,
     usersPage: usersReducer,
-    auth:authReducer,
+    auth: authReducer,
     sidebar: sidebarReducer
 });
 
