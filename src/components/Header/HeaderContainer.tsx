@@ -22,7 +22,7 @@ type mapStatePropsType = {
 }
 
 type mapDispatchPropsType = {
-    setAuthUserData: (userId: number | null, email: string, login: string) => void
+    setAuthUserData: (id: number | null, email: string, login: string) => void
 
 }
 
@@ -36,7 +36,7 @@ class HeaderContainer extends React.Component<PropsType, StateType> {
         })
             .then(response => {
                 if (response.data.resultCode===0){
-                    let {userId: id, email, login} = response.data.data;
+                    let {id, email, login} = response.data.data;
                     this.props.setAuthUserData(id, email, login)
                 }
                     })

@@ -24,7 +24,7 @@ let initialState: AuthType = {
         id: null,
         login: null,
         email: null,
-        isAuth: true,
+        isAuth: false,
     },
     messages: [],
     resultCode: 0
