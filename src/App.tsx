@@ -15,9 +15,7 @@ import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
 
 
-export type AppPropsType = {
-    store: StoreReduxType
-}
+
 
 const App: React.FC/*<AppPropsType>*/ = () => {
     /*const store = props.store.getState();*/

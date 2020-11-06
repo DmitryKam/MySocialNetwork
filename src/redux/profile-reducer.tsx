@@ -1,4 +1,6 @@
-import {ActionsTypes} from './redux-store';
+import {ActionsTypes, RootState} from './redux-store';
+import {ThunkAction, ThunkDispatch} from 'redux-thunk';
+import {usersAPI} from '../API/api';
 
 const ADD_POST = 'ADD-POST';
 const CHANGE_NEW_TEXT = 'CHANGE-NEW-TEXT';
@@ -124,6 +126,18 @@ export const setUsersProfile = (profile:any) => {
         profile
 
     } as const
+}
+
+
+type ThunkType = ThunkAction<void, RootState, unknown, ActionsTypes>
+
+export const getProfileProfileThunkCreator = (userId: string):ThunkType =>{
+    return (dispatch:ThunkDispatch<RootState,unknown,ActionsTypes>,getState: ()=>RootState)=>{
+        usersAPI.getProfileId(userId)
+            .then(data => {
+                dispatch(setUsersProfile(data));
+            })
+    }
 }
 
 

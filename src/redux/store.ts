@@ -1,7 +1,7 @@
 import profileReducer, {addPostAC, setUsersProfile, updateNewMessageTextAC} from './profile-reducer';
 import dialogsReducer, {changeNewTextAC, sendMessageAC} from './dialogs-reducer';
 import sidebarReducer from './sidebar-reducer';
-import {follow, setCurrentPage, toggleisFetching, setTotalUsersCount, setUsers, unFollow} from './users-reducer';
+import {followSuccess, setCurrentPage, toggleisFetching, setTotalUsersCount, setUsers, unFollowSuccess} from './users-reducer';
 import {ActionsTypes} from './redux-store';
 
 export type MessageType = {

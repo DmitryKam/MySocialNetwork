@@ -1,11 +1,9 @@
 import React from 'react';
 import Profile from './Profile';
-import axios from 'axios';
 import {connect} from 'react-redux';
-import {ProfileType, setUsersProfile} from '../../redux/profile-reducer';
+import {getProfileProfileThunkCreator, ProfileType, setUsersProfile} from '../../redux/profile-reducer';
 import {RootState} from '../../redux/redux-store';
 import {withRouter, RouteComponentProps} from 'react-router-dom'
-import {usersAPI} from '../../API/api';
 
 type PathParamsType = {
     userId:string
@@ -19,7 +17,7 @@ type MapStatePropsType = {
     profile: ProfileType
 }
 type MapDispatchPropsType = {
-    setUsersProfile:(profile:ProfileType)=>void
+    getProfileProfileThunkCreator:(userId:string)=>void
 }
 
 type OwnPropsType = MapStatePropsType & MapDispatchPropsType
@@ -33,19 +31,21 @@ class ProfileContainer extends React.Component<PropsType,StateType> {
     componentDidMount():void {
         let userId = this.props.match.params.userId;
         if(!userId){
-            userId='2';
+            userId=`2`;
         }
-        debugger;
-        usersAPI.getProfileId(userId)
-            .then(data => {
-                this.props.setUsersProfile(data);
-            })
+        this.props.getProfileProfileThunkCreator(userId);
+        // if(!userId){
+        //     userId='2';
+        // }
+        // usersAPI.getProfileId(userId)
+        //     .then(data => {
+        //         this.props.setUsersProfile(data);
+        //     })
     }
 
     render() {
         return (
-            <Profile {...this.props}
-                     profile={this.props.profile}/>
+            <Profile {...this.props}/>
         );
     }
 }
@@ -59,4 +59,6 @@ let mapStateToProps = (state:RootState):MapStatePropsType=> ({
 
 
 let WidthUrlDataContainerComponent = withRouter(ProfileContainer);
-export default connect(mapStateToProps, {setUsersProfile}) (WidthUrlDataContainerComponent);
+export default connect(mapStateToProps, {
+   getProfileProfileThunkCreator,
+}) (WidthUrlDataContainerComponent);
