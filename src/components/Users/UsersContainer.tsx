@@ -38,9 +38,9 @@ type mapDispatchPropsType = {
 }
 
 
-type PropsType = OwnPropsType & mapStatePropsType & mapDispatchPropsType
+export type UsersPropsType = OwnPropsType & mapStatePropsType & mapDispatchPropsType
 
-class UsersComponent extends React.Component<PropsType, StateType> {
+class UsersComponent extends React.Component<UsersPropsType, StateType> {
 
     componentDidMount(): void {
         this.props.getUsersThunkCreater(this.props.currentPage, this.props.pageSize);
@@ -68,7 +68,7 @@ class UsersComponent extends React.Component<PropsType, StateType> {
                 deleteFollowThunkCreater={this.props.deleteFollowThunkCreater}
                 toggleFollowingThunkCreater={this.props.toggleFollowingThunkCreater}
             />
-            <Preloader/>
+            {/*<Preloader/>*/}
         </>
 
     }

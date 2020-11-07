@@ -7,9 +7,13 @@ import {Dispatch} from 'redux';
 import {ActionsTypes} from '../../redux/redux-store';
 
 
+
+
+
 let mapStateToProps = (state:RootState) => {
     return {
-        dialogsPage: state.dialogPage
+        dialogsPage: state.dialogPage,
+        auth: state.auth,
     }
 }
 let mapDispatchToProps = (dispatch:Dispatch<ActionsTypes>) => { // Нужно подумать
