@@ -5,18 +5,21 @@ import {RootState} from '../../redux/redux-store';
 import {connect} from 'react-redux';
 import {Dispatch} from 'redux';
 import {ActionsTypes} from '../../redux/redux-store';
+import {withAuthRedirect} from '../../hoc/withAuthRedirect';
 
 
 
 
 
 let mapStateToProps = (state:RootState) => {
+    debugger;
+
     return {
         dialogsPage: state.dialogPage,
         auth: state.auth,
     }
 }
-let mapDispatchToProps = (dispatch:Dispatch<ActionsTypes>) => { // Нужно подумать
+let mapDispatchToProps = (dispatch:Dispatch<ActionsTypes>) => {
     return {
         onNewMessageChange: (text: string)=>{
             dispatch(changeNewTextAC(text))
@@ -27,6 +30,8 @@ let mapDispatchToProps = (dispatch:Dispatch<ActionsTypes>) => { // Нужно п
     }
 }
 
-const DialogsContainer = connect(mapStateToProps,mapDispatchToProps)(Dialogs);
+const AuthRedirectComponent = withAuthRedirect(Dialogs)
+
+const DialogsContainer = connect(mapStateToProps,mapDispatchToProps)(AuthRedirectComponent);
 
 export default DialogsContainer;
