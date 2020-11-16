@@ -5,7 +5,6 @@ import {
     getProfileProfileThunkCreator,
     getStatus,
     ProfileType,
-    setUsersProfile,
     updateStatus
 } from '../../redux/profile-reducer';
 import {RootState} from '../../redux/redux-store';
@@ -51,6 +50,14 @@ class ProfileContainer extends React.Component<ProfilesPropsType, StateType> {
 
     }
 
+
+    componentDidUpdate(prevProps: Readonly<ProfilesPropsType>, prevState: Readonly<StateType>, snapshot?: any): void {
+       if(prevProps.status !== this.props.status){
+           this.setState({
+           status: this.props.status
+       })
+       }
+    }
 
     render() {
 

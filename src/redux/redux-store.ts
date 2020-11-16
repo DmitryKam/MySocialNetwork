@@ -11,7 +11,8 @@ import usersReducer, {
     unFollowSuccess
 } from './users-reducer';
 import {authReducer, setAuthUserData} from './auth-reducer';
-import thunkMiddleware from 'redux-thunk'
+import thunkMiddleware from 'redux-thunk';
+import { reducer as formReducer } from 'redux-form';
 
 
 export type ActionsTypes = ReturnType<typeof addPostAC>
@@ -35,7 +36,8 @@ let reducers = combineReducers({
     dialogPage: dialogsReducer,
     usersPage: usersReducer,
     auth: authReducer,
-    sidebar: sidebarReducer
+    sidebar: sidebarReducer,
+    form: formReducer,
 });
 
 export type RootState = ReturnType<typeof reducers>
