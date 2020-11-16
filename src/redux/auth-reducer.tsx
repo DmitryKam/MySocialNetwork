@@ -68,7 +68,6 @@ export const authMeThunkCreator = ():ThunkType => {
     return (dispatch:ThunkDispatch<RootState,unknown,ActionsTypes>,getState: ()=>RootState)=>{
         autchAPI.getMe()
             .then(data => {
-                debugger
                 if (data.resultCode===0){
                     let {id, email, login} = data.data;
                     dispatch(setAuthUserData(id, email, login));

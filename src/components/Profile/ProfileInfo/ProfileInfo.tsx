@@ -2,25 +2,33 @@ import React from 'react';
 import s from './ProfileInfo.module.css'
 import Preloader from '../../../common/Preloader/Preloader';
 import {ProfileType} from '../../../redux/profile-reducer';
+import ProfileStatus from './ProfileStatus';
 
 type ProfileInfoPropsType = {
     profile: ProfileType
+    getStatus: (userId: string) => void
+    updateStatus:(status: string) => void
+    status: string
 }
 
 
-function ProfileInfo(props:ProfileInfoPropsType) {
+function ProfileInfo(props: ProfileInfoPropsType) {
     if (!props.profile) {
         return <Preloader/>
     }
     return (<div>
-            <div>
+            {/*            <div>
                 <img
                     src={'https://image.shutterstock.com/image-photo/niagara-waterfall-big-water-fall-260nw-1219662829.jpg'}/>
-            </div>
+            </div>*/}
             <div className={s.descriptionblock}>
                 <img src={props.profile.photos.large}/>
                 <div>{props.profile.lookingForAJobDescription}</div>
                 <div>{props.profile.aboutMe}</div>
+
+            </div>
+            <div>
+                <ProfileStatus {...props}/>
             </div>
 
         </div>

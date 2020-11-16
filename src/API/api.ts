@@ -24,10 +24,24 @@ export const usersAPI = {
         return instance.post(`follow/${id}`)
             .then(response=>response.data)
     },
-    getProfileId(userId:string) {
+    getProfile(userId:string) {
+        console.warn('obsolete method. Please profileAPI object')
+        return profileAPI.getProfile(userId)
+    },
+
+}
+
+export const profileAPI = {
+    getProfile(userId:string) {
         return instance.get(`profile/${userId}`)
             .then(response=>response.data)
     },
+    getStatus(userId:string){
+        return instance.get(`profile/status/${userId}`)
+    },
+    updateStatus(status:string){
+        return instance.put(`profile/status/`,{ status:status })
+    }
 
 }
 

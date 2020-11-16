@@ -11,7 +11,6 @@ type HeaderPropsType = {
 
 
 function Header(props:PropsType) {
-    debugger;
     return(
         <header className={s.header}>
             <img src={'https://d2pye4zfc3qqup.cloudfront.net/wp-content/uploads/2016/11/10100802/Header-Immage-Moon-Rover.png'}/>

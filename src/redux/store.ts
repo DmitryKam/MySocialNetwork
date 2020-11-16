@@ -43,56 +43,56 @@ export type StoreType = {
 }
 
 
-const store: StoreType = {
-    _state: {
-        profilePage: {
-            posts: [
-                {id: 1, message: 'Hi, how are you?', likesCount: '4'},
-                {id: 2, message: 'I learn in IT-INCUBATOR', likesCount: '10'},
-                {id: 3, message: 'My message about me?', likesCount: '15'},
-                {id: 4, message: 'My message about me?', likesCount: '17'},
-            ],
-            newPostText: '',
-            profile: null //add
-        },
-        dialogPage: {
-            dialogs: [
-                {idName: 1, dialogName: 'Dima'},
-                {idName: 2, dialogName: 'Andi'},
-                {idName: 3, dialogName: 'Peter'},
-                {idName: 4, dialogName: 'Nik'},
-                {idName: 5, dialogName: 'Slava'},
-            ],
-            messages: [
-                {id: 1, message: 'Yo'},
-                {id: 2, message: 'How is you?'},
-                {id: 3, message: 'Bue'},
-                {id: 4, message: 'Did you like a coffe?'},
-                {id: 5, message: 'Hello'},
-            ],
-            newMessageBody: ''
-        },
-        sidebar: {}
-    },
-    _onChange() {
-        console.log('State changed');
-    },
-
-    getState() {
-        return this._state;
-    },
-    subscribe(observer) {
-        this._onChange = observer
-    },
-
-    dispatch(action) {
-
-        this._state.profilePage = profileReducer(this._state.profilePage, action);
-        this._state.dialogPage = dialogsReducer(this._state.dialogPage, action);
-        this._state.sidebar = sidebarReducer(this._state.sidebar, action);
-
-        this._onChange();
-    }
-}
+// const store: StoreType = {
+//     _state: {
+//         profilePage: {
+//             posts: [
+//                 {id: 1, message: 'Hi, how are you?', likesCount: '4'},
+//                 {id: 2, message: 'I learn in IT-INCUBATOR', likesCount: '10'},
+//                 {id: 3, message: 'My message about me?', likesCount: '15'},
+//                 {id: 4, message: 'My message about me?', likesCount: '17'},
+//             ],
+//             newPostText: '',
+//             profile: null //add
+//         },
+//         dialogPage: {
+//             dialogs: [
+//                 {idName: 1, dialogName: 'Dima'},
+//                 {idName: 2, dialogName: 'Andi'},
+//                 {idName: 3, dialogName: 'Peter'},
+//                 {idName: 4, dialogName: 'Nik'},
+//                 {idName: 5, dialogName: 'Slava'},
+//             ],
+//             messages: [
+//                 {id: 1, message: 'Yo'},
+//                 {id: 2, message: 'How is you?'},
+//                 {id: 3, message: 'Bue'},
+//                 {id: 4, message: 'Did you like a coffe?'},
+//                 {id: 5, message: 'Hello'},
+//             ],
+//             newMessageBody: ''
+//         },
+//         sidebar: {}
+//     },
+//     _onChange() {
+//         console.log('State changed');
+//     },
+//
+//     getState() {
+//         return this._state;
+//     },
+//     subscribe(observer) {
+//         this._onChange = observer
+//     },
+//
+//    // dispatch(action) {
+// //@ts-ignore
+//         //this._state.profilePage = profileReducer(this._state.profilePage, action);
+//        // this._state.dialogPage = dialogsReducer(this._state.dialogPage, action);
+//         //this._state.sidebar = sidebarReducer(this._state.sidebar, action);
+//
+//         //this._onChange();
+//     //}
+// }
 
 export default 1;
