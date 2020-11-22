@@ -16,13 +16,11 @@ function ProfileInfo(props: ProfileInfoPropsType) {
     if (!props.profile) {
         return <Preloader/>
     }
+
     return (<div>
-            {/*            <div>
-                <img
-                    src={'https://image.shutterstock.com/image-photo/niagara-waterfall-big-water-fall-260nw-1219662829.jpg'}/>
-            </div>*/}
+
             <div className={s.descriptionblock}>
-                <img src={props.profile.photos.large}/>
+                <img src={props.profile.photos.large ? props.profile.photos.large : ""}/>
                 <div>{props.profile.lookingForAJobDescription}</div>
                 <div>{props.profile.aboutMe}</div>
 

@@ -3,7 +3,6 @@ import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {profileAPI, usersAPI} from '../API/api';
 
 const ADD_POST = 'ADD-POST';
-const CHANGE_NEW_TEXT = 'CHANGE-NEW-TEXT';
 const SET_USERS_PROFILE = 'SET_USERS_PROFILE';
 const SET_STATUS = 'SET-STATUS';
 
@@ -26,8 +25,8 @@ export type ContactsType = {
 }
 
 type PhotosType = {   // Dublicte from users-reducer
-    small: string
-    large: string
+    small: string | null
+    large: string | null
 }
 
 export type ProfileType = {
@@ -42,7 +41,6 @@ export type ProfileType = {
 
 export type ProfilePageType = {
     posts: Array<PostType>
-    newPostText: string
     profile: ProfileType
     status: string
 }
@@ -52,8 +50,7 @@ let initialState: ProfilePageType = {
         {id: 2, message: 'I learn in IT-INCUBATOR', likesCount: '10'},
         {id: 3, message: 'My message about me?', likesCount: '15'},
         {id: 4, message: 'My message about me?', likesCount: '17'},
-    ],
-    newPostText: '',
+    ] as Array<PostType>,
     profile: {
         aboutMe:'',
         contacts: {
@@ -88,15 +85,9 @@ const profileReducer = (state = initialState, action: ActionsTypes):ProfilePageT
             }
             return  {
                 ...state,
-                newPostText: '',
                 posts: [...state.posts, newPost]
             }
 
-        case CHANGE_NEW_TEXT:
-            return {
-                ...state,
-                newPostText: action.newText
-            }
         case 'SET_USERS_PROFILE':
             return {
                 ...state,
@@ -120,13 +111,6 @@ export const addPostAC = (postText: string) => {
     return {
         type: ADD_POST,
         postText: postText
-    } as const
-}
-
-export const updateNewMessageTextAC = (newText: string) => {
-    return {
-        type: CHANGE_NEW_TEXT,
-        newText
     } as const
 }
 

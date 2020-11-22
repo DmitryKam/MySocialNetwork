@@ -1,6 +1,5 @@
 import {ActionsTypes} from './redux-store';
 
-const UPDATE_NEW_MESSAGE_BODY = "UPDATE-NEW-MESSAGE-BODY";
 const SEND_MESSAGE = "SEND-MESSAGE";
 
 export type DialogType = {
@@ -14,7 +13,6 @@ export type MessageType = {
 export type DialogsPageType = {
     dialogs: Array<DialogType>
     messages: Array<MessageType>
-    newMessageBody:string
 }
 
 let initialState:DialogsPageType = {
@@ -24,26 +22,21 @@ let initialState:DialogsPageType = {
             {idName: 3, dialogName: 'Peter'},
             {idName: 4, dialogName: 'Nik'},
             {idName: 5, dialogName: 'Slava'},
-        ],
+        ] as Array<DialogType>,
         messages: [
             {id: 1, message: 'Yo'},
             {id: 2, message: 'How is you?'},
             {id: 3, message: 'Bue'},
             {id: 4, message: 'Did you like a coffe?'},
             {id: 5, message: 'Hello'},
-        ],
-        newMessageBody: ''
+        ] as Array<MessageType>,
 }
 
-const dialogsReducer = (state=initialState, action:ActionsTypes) => {
+const dialogsReducer = (state=initialState, action:ActionsTypes):DialogsPageType => {
 
 
     switch (action.type) {
-        case UPDATE_NEW_MESSAGE_BODY:
-            return {
-                ...state,
-                newMessageBody: action.newMessageBody
-            }
+
         case SEND_MESSAGE:
             const body: MessageType = {
                 id: new Date().getTime(),
@@ -51,7 +44,6 @@ const dialogsReducer = (state=initialState, action:ActionsTypes) => {
             }
             return {
                 ...state,
-                newMessageBody: '',
                 messages:[...state.messages, body]
             }
 
@@ -60,12 +52,6 @@ const dialogsReducer = (state=initialState, action:ActionsTypes) => {
     }
 }
 
-export const changeNewTextAC = (newMessageBody:string) => {
-    return{
-        type:UPDATE_NEW_MESSAGE_BODY,
-        newMessageBody:newMessageBody
-    } as const
-}
 
 export const sendMessageAC = (sendMessage:string) => {
     return {

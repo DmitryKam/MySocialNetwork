@@ -45,11 +45,36 @@ export const profileAPI = {
 
 }
 
+
+
+
+type MeResponseType = {
+    data: {id: number, email:string, login:string}
+    resultCode: number
+    messages: string[]
+}
+
+
+type LoginResponseType = {
+    data:{
+        userId: number
+    }
+    resultCode: number
+    messages: string[]
+}
+
+
+
 export const autchAPI = {
     getMe(){
-        return instance.get(`auth/me`)
-            .then(response=>response.data)
+        return instance.get<MeResponseType>(`auth/me`).then(res=>res.data)
     },
+    login(email: string, password:string, rememberMe = false){
+        return instance.post<LoginResponseType>(`auth/login`,{email, password, rememberMe}).then(res=>res.data)
+    },
+    logout(){
+        return instance.delete(`auth/login`)
+    }
 }
 
 

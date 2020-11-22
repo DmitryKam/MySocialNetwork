@@ -2,7 +2,7 @@ import React from 'react';
 import s from './Header.module.css';
 import Header from './Header';
 import {connect} from 'react-redux';
-import {authMeThunkCreator} from '../../redux/auth-reducer';
+import {authMeThunkCreator, logoutTC} from '../../redux/auth-reducer';
 import {RootState} from '../../redux/redux-store';
 
 
@@ -12,9 +12,7 @@ type OwnPropsType = {}
 
 type mapStatePropsType = {
 
-    //id: number | null,
     login: string | null,
-    // email: number|null,
     isAuth: boolean
 
     messages: string[],
@@ -23,22 +21,16 @@ type mapStatePropsType = {
 
 type mapDispatchPropsType = {
     authMeThunkCreator: () => void
+    logoutTC:()=>void
 
 }
 
-export type PropsType = OwnPropsType & mapStatePropsType & mapDispatchPropsType
+export type HeadersPropsType = OwnPropsType & mapStatePropsType & mapDispatchPropsType
 
-class HeaderContainer extends React.Component<PropsType, StateType> {
+class HeaderContainer extends React.Component<HeadersPropsType, StateType> {
 
     componentDidMount(): void {
         this.props.authMeThunkCreator();
-        // usersAPI.getMe()
-        //     .then(data => {
-        //         if (data.resultCode===0){
-        //             let {id, email, login} = data.data;
-        //             this.props.setAuthUserData(id, email, login)
-        //         }
-        //             })
     }
 
 
@@ -48,7 +40,6 @@ class HeaderContainer extends React.Component<PropsType, StateType> {
         />
     }
 }
-
 const mapStateToProps = (state: RootState): mapStatePropsType => {
     return (
         {
@@ -63,4 +54,4 @@ const mapStateToProps = (state: RootState): mapStatePropsType => {
     )
 }
 
-export default connect<mapStatePropsType, mapDispatchPropsType, OwnPropsType, RootState>(mapStateToProps, {authMeThunkCreator})(HeaderContainer);
+export default connect<mapStatePropsType, mapDispatchPropsType, OwnPropsType, RootState>(mapStateToProps, {authMeThunkCreator, logoutTC})(HeaderContainer);
