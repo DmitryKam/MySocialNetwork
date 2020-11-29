@@ -25,11 +25,11 @@ let mapDispatchToProps = (dispatch:Dispatch<ActionsTypes>) => {
     }
 }
 
-
 //const AuthRedirectComponent = withAuthRedirect(Dialogs)
 
 //const DialogsContainer = connect(mapStateToProps,mapDispatchToProps)(AuthRedirectComponent);
+type DialogsType = ReturnType<typeof Dialogs>
 
-const DialogsContainer =compose<any>(connect(mapStateToProps,mapDispatchToProps), withAuthRedirect)(Dialogs)
+const DialogsContainer =compose<DialogsType>(connect(mapStateToProps,mapDispatchToProps), withAuthRedirect)(Dialogs)
 
 export default DialogsContainer;
