@@ -7,12 +7,21 @@ import {
     unFollowSuccess,
     UsersType,
     toggleIsFollowingProgress,
-    getUsersThunkCreater, deleteFollowThunkCreater, toggleFollowingThunkCreater
+    requestUsersThunkCreater, deleteFollowThunkCreater, toggleFollowingThunkCreater
 }
     from '../../redux/users-reducer';
 import Users from './Users';
 import Preloader from '../../common/Preloader/Preloader';
 import {withAuthRedirect} from '../../hoc/withAuthRedirect';
+import {compose} from 'redux';
+import {
+    currentPage,
+    followingInProgress,
+    getUsers,
+    isFetching,
+    pageSize,
+    totalUsersCount
+} from '../../redux/users-selectors';
 
 type StateType = {}
 
@@ -79,24 +88,19 @@ class UsersComponent extends React.Component<UsersPropsType, StateType> {
 
 let mapStateToProps = (state: RootState): mapStatePropsType => {
     return {
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        followingInProgress: state.usersPage.followingInProgress,
+        users: getUsers(state),
+        pageSize: pageSize(state),
+        totalUsersCount: totalUsersCount(state),
+        currentPage: currentPage(state),
+        isFetching: isFetching(state),
+        followingInProgress: followingInProgress(state),
     }
 }
 
-const AuthRedirectComponent = withAuthRedirect(UsersComponent)
 
-const UsersContainer = connect<mapStatePropsType, mapDispatchPropsType, OwnPropsType, RootState>(mapStateToProps, {
-    follow: followSuccess, unFollow: unFollowSuccess, setCurrentPage,
-    toggleIsFollowingProgress, getUsersThunkCreater, deleteFollowThunkCreater,
-    toggleFollowingThunkCreater,
-})(AuthRedirectComponent)
-
-
-
-
-export default UsersContainer;
+export default compose(
+    connect<mapStatePropsType, mapDispatchPropsType, OwnPropsType, RootState>(mapStateToProps, {
+        follow: followSuccess, unFollow: unFollowSuccess, setCurrentPage,
+        toggleIsFollowingProgress, getUsersThunkCreater: requestUsersThunkCreater, deleteFollowThunkCreater,
+        toggleFollowingThunkCreater})
+    ) (UsersComponent);

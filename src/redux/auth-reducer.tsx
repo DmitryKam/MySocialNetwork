@@ -1,6 +1,8 @@
 import {ActionsTypes, RootState} from './redux-store';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {autchAPI} from '../API/api';
+import {FormAction, stopSubmit} from 'redux-form';
+import {type} from 'os';
 
 
 const SET_USER_DATA = 'SET_USER_DATA';
@@ -11,6 +13,7 @@ type DataType = {
     login: string | null,
     email: string | null,
     isAuth: boolean
+    //captchaUrl:string | null,
 }
 
 export type AuthType = {
@@ -27,18 +30,19 @@ let initialState: AuthType = {
         login: null as string | null,
         email: null as string | null,
         isAuth: false,
+        //captchaUrl: null as string | null,
     },
     messages: [],
     resultCode: 0
 }
 
-export const authReducer = (state: AuthType = initialState, action: ActionsTypes):AuthType => {
+export const authReducer = (state: AuthType = initialState, action: ActionsTypes): AuthType => {
     switch (action.type) {
         case 'SET_USER_DATA': {
             return {
                 ...state,
                 data: {
-                     ...action.payload,
+                    ...action.payload,
                 }
 
             }
@@ -70,13 +74,15 @@ export const setAuthUserData = (id: number | null, email: string | null, login: 
 // })
 
 
-type ThunkType = ThunkAction<void, RootState, unknown, ActionsTypes>
 
-export const authMeThunkCreator = ():ThunkType => {
-    return (dispatch:ThunkDispatch<RootState,unknown,ActionsTypes>,getState: ()=>RootState)=>{
-        autchAPI.getMe()
+
+type ThunkType = ThunkAction<void, RootState, unknown, ActionsTypes | FormAction>
+
+export const authMeThunkCreator = (): ThunkType => {
+    return (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
+       return autchAPI.getMe()
             .then(response => {
-                if (response.resultCode===0){
+                if (response.resultCode === 0) {
                     let {id, email, login} = response.data;
                     dispatch(setAuthUserData(id, email, login, true));
                 }
@@ -85,24 +91,28 @@ export const authMeThunkCreator = ():ThunkType => {
 }
 
 
-export const loginTC = (email: string, password:string, rememberMe:boolean):ThunkType => {
-    return (dispatch:ThunkDispatch<RootState,unknown,ActionsTypes>,getState: ()=>RootState)=>{
+export const loginTC = (email: string, password: string, rememberMe: boolean): ThunkType => {
+    return (dispatch, getState: () => RootState) => {
 
-        autchAPI.login(email,password,rememberMe)
+
+        autchAPI.login(email, password, rememberMe)
             .then(response => {
-                if (response.resultCode===0){
+                if (response.resultCode === 0) {
                     dispatch(authMeThunkCreator());
+                } else {
+                    let message = response.messages.length > 0 ? response.messages[0] : "Some error"
+                    dispatch(stopSubmit('login',{_error:message}))
                 }
             })
     }
 }
 
-export const logoutTC = ():ThunkType => {
-    return (dispatch:ThunkDispatch<RootState,unknown,ActionsTypes>,getState: ()=>RootState)=>{
+export const logoutTC = (): ThunkType => {
+    return (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
 
         autchAPI.logout()
             .then(response => {
-                if (response.data.resultCode===0){
+                if (response.data.resultCode === 0) {
                     dispatch(setAuthUserData(null, null, null, false));
                 }
             })

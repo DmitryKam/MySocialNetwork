@@ -23,6 +23,7 @@ type MapStatePropsType = {
     profile: ProfileType
     isAuth: boolean
     status: string
+    authorizedUserId: number | null
 }
 type MapDispatchPropsType = {
     getProfileProfileThunkCreator: (userId: string) => void
@@ -42,7 +43,10 @@ class ProfileContainer extends React.Component<ProfilesPropsType, StateType> {
         let userId = this.props.match.params.userId;
         let status = this.props.status
         if (!userId) {
-            userId = `11906`;
+            userId = String(this.props.authorizedUserId)
+            if(!userId){
+                this.props.history.push("/login")
+            }
         }
         this.props.getProfileProfileThunkCreator(userId);
         this.props.getStatus(userId)
@@ -72,6 +76,7 @@ let mapStateToProps = (state: RootState): MapStatePropsType => ({
     profile: state.profilePage.profile,
     isAuth: state.auth.data.isAuth,
     status: state.profilePage.status,
+    authorizedUserId: state.auth.data.id
 
 })
 
