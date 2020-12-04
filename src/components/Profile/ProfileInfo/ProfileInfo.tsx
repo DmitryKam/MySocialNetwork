@@ -3,6 +3,7 @@ import s from './ProfileInfo.module.css'
 import Preloader from '../../../common/Preloader/Preloader';
 import {ProfileType} from '../../../redux/profile-reducer';
 import ProfileStatus from './ProfileStatus';
+import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 
 type ProfileInfoPropsType = {
     profile: ProfileType
@@ -26,7 +27,7 @@ function ProfileInfo(props: ProfileInfoPropsType) {
 
             </div>
             <div>
-                <ProfileStatus {...props}/>
+                <ProfileStatusWithHooks {...props} updateStatus={props.updateStatus}/>
             </div>
 
         </div>
