@@ -42,16 +42,16 @@ export type ProfileType = {
 export type ProfilePageType = {
     posts: Array<PostType>
     profile: ProfileType
-    status: string
+    status: string | null
 }
 let initialState: ProfilePageType = {
-    posts: [
-        {id: 1, message: 'Hi, how are you?', likesCount: '4'},
-        {id: 2, message: 'I learn in IT-INCUBATOR', likesCount: '10'},
-        {id: 3, message: 'My message about me?', likesCount: '15'},
-        {id: 4, message: 'My message about me?', likesCount: '17'},
-    ] as Array<PostType>,
-    profile: {
+     posts: [
+         {id: 1, message: 'Hi, how are you?', likesCount: '4'},
+         {id: 2, message: 'I learn in IT-INCUBATOR', likesCount: '10'},
+         {id: 3, message: 'My message about me?', likesCount: '15'},
+         {id: 4, message: 'My message about me?', likesCount: '17'},
+     ] as Array<PostType>,
+     profile: {
         aboutMe:'',
         contacts: {
             facebook:'',
@@ -72,7 +72,7 @@ let initialState: ProfilePageType = {
         lookingForAJobDescription:'',
         userId:0
     },
-    status: ''
+     status: null
 }
 
 const profileReducer = (state = initialState, action: ActionsTypes):ProfilePageType => {
@@ -151,7 +151,6 @@ export const updateStatus = (status:string):ThunkType =>(dispatch:ThunkDispatch<
     profileAPI.updateStatus(status)
         .then(response =>{
             if(response.data.resultCode === 0){
-                debugger
             dispatch(setStatus(status))
         }
         });

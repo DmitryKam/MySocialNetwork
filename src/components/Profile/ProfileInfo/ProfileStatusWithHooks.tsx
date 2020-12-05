@@ -1,13 +1,13 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from './ProfileInfo.module.css'
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/redux-store';
 
 
 type ProfileStatusPropsType = {
-    status: string
+    status: string | null
     getStatus: (userId: string) => void
-    updateStatus:(status: string) => void
+    updateStatus:(status: string | null) => void
 }
 
 
@@ -16,7 +16,11 @@ const ProfileStatusWithHooks =(props:ProfileStatusPropsType) => {
 
 //const status = useSelector<RootState>(state =>state.profilePage.status)
 const [editMode, setEditMode] = useState<boolean>(false)
-const [status, setStatus] = useState<string>(props.status)
+const [status, setStatus] = useState<string| null>(props.status)
+
+    useEffect(()=>{
+        setStatus(props.status)
+    },[props.status])
 
     const activateEditMode = ()=>{
         setEditMode(true)
@@ -43,7 +47,7 @@ const [status, setStatus] = useState<string>(props.status)
                         onChange={onStatusChange}
                         autoFocus={true}
                         onBlur={deactivateEditMode }
-                        value={status}/>
+                        value={String(status)}/>
                 </div>
                 }
             </div>

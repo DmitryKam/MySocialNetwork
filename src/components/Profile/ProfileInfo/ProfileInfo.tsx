@@ -8,8 +8,8 @@ import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 type ProfileInfoPropsType = {
     profile: ProfileType
     getStatus: (userId: string) => void
-    updateStatus:(status: string) => void
-    status: string
+    updateStatus:(status: string|null) => void
+    status: string | null
 }
 
 

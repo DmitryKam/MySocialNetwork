@@ -22,13 +22,13 @@ type StateType = {}
 type MapStatePropsType = {
     profile: ProfileType
     isAuth: boolean
-    status: string
+    status: string | null
     authorizedUserId: number | null
 }
 type MapDispatchPropsType = {
     getProfileProfileThunkCreator: (userId: string) => void
     getStatus: (userId: string) => void
-    updateStatus:(status: string) => void
+    updateStatus:(status: string | null) => void
 
 }
 
