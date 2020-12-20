@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect, MapStateToProps} from 'react-redux';
+import {connect} from 'react-redux';
 import {RootState} from '../../redux/redux-store';
 import {
     setCurrentPage,
@@ -12,7 +12,6 @@ import {
     from '../../redux/users-reducer';
 import Users from './Users';
 import Preloader from '../../common/Preloader/Preloader';
-import {withAuthRedirect} from '../../hoc/withAuthRedirect';
 import {compose} from 'redux';
 import {
     currentPage,
@@ -53,12 +52,14 @@ export type UsersPropsType = OwnPropsType & mapStatePropsType & mapDispatchProps
 class UsersComponent extends React.Component<UsersPropsType, StateType> {
 
     componentDidMount(): void {
-        this.props.getUsersThunkCreater(this.props.currentPage, this.props.pageSize);
+        const {currentPage,pageSize} = this.props
+        this.props.getUsersThunkCreater(currentPage, pageSize);
 
     }
 
     onPageChanged = (pageNumber: number) => {
-        this.props.getUsersThunkCreater(pageNumber, this.props.pageSize);
+        const {pageSize}= this.props
+        this.props.getUsersThunkCreater(pageNumber, pageSize);
     }
 
 
@@ -78,7 +79,6 @@ class UsersComponent extends React.Component<UsersPropsType, StateType> {
                 deleteFollowThunkCreater={this.props.deleteFollowThunkCreater}
                 toggleFollowingThunkCreater={this.props.toggleFollowingThunkCreater}
             />
-            {/*<Preloader/>*/}
         </>
 
     }

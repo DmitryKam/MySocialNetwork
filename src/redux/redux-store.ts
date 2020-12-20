@@ -1,5 +1,5 @@
-import {applyMiddleware, combineReducers, createStore} from 'redux';
-import profileReducer, {addPostAC, setStatus, setUsersProfile} from './profile-reducer';
+import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import profileReducer, {addPostAC, deletePostAC, setStatus, setUsersProfile} from './profile-reducer';
 import dialogsReducer, {sendMessageAC} from './dialogs-reducer';
 import sidebarReducer from './sidebar-reducer';
 import usersReducer, {
@@ -29,6 +29,7 @@ export type ActionsTypes = ReturnType<typeof addPostAC>
     | ReturnType<typeof toggleIsFollowingProgress>
     | ReturnType<typeof setStatus>
     | ReturnType<typeof initializedSuccessAC>
+    | ReturnType<typeof deletePostAC>
 
 
 let reducers = combineReducers({
@@ -41,13 +42,21 @@ let reducers = combineReducers({
     app: appReducer
 });
 
+// @ts-ignore
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));
+// @ts-ignore
+window.__store__ = store
+
+
+
 export type RootState = ReturnType<typeof reducers>
 
-let store = createStore(reducers, applyMiddleware(thunkMiddleware));
-
 export type StoreReduxType = typeof store
+//let store = createStore(reducers, applyMiddleware(thunkMiddleware));
+
+
 
 
 export default store;
-// @ts-ignore
-window.store = store
+

@@ -41,6 +41,7 @@ class ProfileContainer extends React.Component<ProfilesPropsType, StateType> {
 
     componentDidMount(): void {
         let userId = this.props.match.params.userId;
+
         let status = this.props.status
         if (!userId) {
             userId = String(this.props.authorizedUserId)

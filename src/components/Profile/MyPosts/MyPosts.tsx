@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React from 'react';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
 import {PostType} from '../../../redux/profile-reducer';
@@ -14,9 +14,10 @@ type MyPostsPropsType = {
 }
 
 
-function MyPosts(props: MyPostsPropsType) {
+const MyPosts = React.memo((props: MyPostsPropsType) => {
 
-    let postElement = props.posts.map(p => <Post key={p.id} message={p.message} likesCount={p.likesCount}/>)
+    console.log('Render')
+    let postElement = [...props.posts].map(p => <Post key={p.id} message={p.message} likesCount={p.likesCount}/>)
 
     const onSubmit = (formData: AddPostFormDataType) => {
         if (formData.newMyPost) {
@@ -34,7 +35,9 @@ function MyPosts(props: MyPostsPropsType) {
             </div>
         </div>
     );
-}
+});
+
+
 
 
 type AddPostFormDataType = {

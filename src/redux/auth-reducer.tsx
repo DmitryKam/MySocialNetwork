@@ -5,7 +5,7 @@ import {FormAction, stopSubmit} from 'redux-form';
 import {type} from 'os';
 
 
-const SET_USER_DATA = 'SET_USER_DATA';
+const SET_USER_DATA = 'samurai-network/auth/SET_USER_DATA';
 const GET_CAPTCHA_URL_SUCCESS = 'GET-CAPTCHA-URL-SUCCESS'
 
 type DataType = {
@@ -38,7 +38,7 @@ let initialState: AuthType = {
 
 export const authReducer = (state: AuthType = initialState, action: ActionsTypes): AuthType => {
     switch (action.type) {
-        case 'SET_USER_DATA': {
+        case SET_USER_DATA: {
             return {
                 ...state,
                 data: {
@@ -74,47 +74,36 @@ export const setAuthUserData = (id: number | null, email: string | null, login: 
 // })
 
 
-
-
 type ThunkType = ThunkAction<void, RootState, unknown, ActionsTypes | FormAction>
 
-export const authMeThunkCreator = (): ThunkType => {
-    return (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
-       return autchAPI.getMe()
-            .then(response => {
-                if (response.resultCode === 0) {
-                    let {id, email, login} = response.data;
-                    dispatch(setAuthUserData(id, email, login, true));
-                }
-            })
+export const authMeThunkCreator = (): ThunkType => async (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
+    let response = await autchAPI.getMe()
+
+    if (response.resultCode === 0) {
+        let {id, email, login} = response.data;
+        dispatch(setAuthUserData(id, email, login, true));
     }
 }
 
 
-export const loginTC = (email: string, password: string, rememberMe: boolean): ThunkType => {
-    return (dispatch, getState: () => RootState) => {
+export const loginTC = (email: string, password: string, rememberMe: boolean): ThunkType =>
+    async (dispatch, getState: () => RootState) => {
+        let response = await autchAPI.login(email, password, rememberMe)
 
-
-        autchAPI.login(email, password, rememberMe)
-            .then(response => {
-                if (response.resultCode === 0) {
-                    dispatch(authMeThunkCreator());
-                } else {
-                    let message = response.messages.length > 0 ? response.messages[0] : "Some error"
-                    dispatch(stopSubmit('login',{_error:message}))
-                }
-            })
+        if (response.resultCode === 0) {
+            dispatch(authMeThunkCreator());
+        } else {
+            let message = response.messages.length > 0 ? response.messages[0] : 'Some error'
+            dispatch(stopSubmit('login', {_error: message}))
+        }
     }
-}
 
-export const logoutTC = (): ThunkType => {
-    return (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
+export const logoutTC = (): ThunkType =>
+    async (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
+        let response = await autchAPI.logout()
 
-        autchAPI.logout()
-            .then(response => {
-                if (response.data.resultCode === 0) {
-                    dispatch(setAuthUserData(null, null, null, false));
-                }
-            })
+        if (response.data.resultCode === 0) {
+            dispatch(setAuthUserData(null, null, null, false));
+        }
+
     }
-}

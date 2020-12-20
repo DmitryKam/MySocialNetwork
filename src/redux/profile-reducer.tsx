@@ -5,6 +5,7 @@ import {profileAPI, usersAPI} from '../API/api';
 const ADD_POST = 'ADD-POST';
 const SET_USERS_PROFILE = 'SET_USERS_PROFILE';
 const SET_STATUS = 'SET-STATUS';
+const DELETE_POST = 'DELETE-POST';
 
 
 export type PostType = {
@@ -87,7 +88,12 @@ const profileReducer = (state = initialState, action: ActionsTypes):ProfilePageT
                 ...state,
                 posts: [...state.posts, newPost]
             }
+        case 'DELETE-POST':
+            return {
+                ...state,
+                posts: state.posts.filter(p=>p.id !== action.id)
 
+            }
         case 'SET_USERS_PROFILE':
             return {
                 ...state,
@@ -114,6 +120,13 @@ export const addPostAC = (postText: string) => {
     } as const
 }
 
+export const deletePostAC = (id: number) => {
+    return {
+        type: DELETE_POST,
+        id
+    } as const
+}
+
 export const setUsersProfile = (profile:any) => {
     return {
         type: SET_USERS_PROFILE,
@@ -131,29 +144,29 @@ export const setStatus = (status:string)=>{
 
 type ThunkType = ThunkAction<void, RootState, unknown, ActionsTypes>
 
-export const getProfileProfileThunkCreator = (userId: string):ThunkType =>{
-    return (dispatch:ThunkDispatch<RootState,unknown,ActionsTypes>,getState: ()=>RootState)=>{
-        usersAPI.getProfile(userId)
-            .then(data => {
-                dispatch(setUsersProfile(data));
-            })
+export const getProfileProfileThunkCreator = (userId: string):ThunkType =>
+    async (dispatch:ThunkDispatch<RootState,unknown,ActionsTypes>,getState: ()=>RootState)=>{
+        let response = await usersAPI.getProfile(userId)
+
+                dispatch(setUsersProfile(response));
+
     }
-}
 
-export const getStatus = (userId: string):ThunkType =>(dispatch:ThunkDispatch<RootState, unknown, ActionsTypes>,getState:()=>RootState) =>{
-    profileAPI.getStatus(userId)
-        .then(response =>{
+
+export const getStatus = (userId: string):ThunkType => async (dispatch:ThunkDispatch<RootState, unknown, ActionsTypes>,getState:()=>RootState) =>{
+    let response = await profileAPI.getStatus(userId)
+
             dispatch(setStatus(response.data))
-        });
+
 }
 
-export const updateStatus = (status:string):ThunkType =>(dispatch:ThunkDispatch<RootState, unknown, ActionsTypes>,getState:()=>RootState) =>{
-    profileAPI.updateStatus(status)
-        .then(response =>{
+export const updateStatus = (status:string):ThunkType => async (dispatch:ThunkDispatch<RootState, unknown, ActionsTypes>,getState:()=>RootState) =>{
+   const response = await profileAPI.updateStatus(status)
+
             if(response.data.resultCode === 0){
             dispatch(setStatus(status))
         }
-        });
+
 }
 
 

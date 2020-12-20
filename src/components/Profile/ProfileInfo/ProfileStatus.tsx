@@ -2,7 +2,7 @@ import React, {ChangeEvent} from 'react';
 import s from './ProfileInfo.module.css'
 
 
-type ProfileStatusPropsType = {
+export type ProfileStatusPropsType = {
     status: string
     getStatus: (userId: string) => void
     updateStatus:(status: string) => void
