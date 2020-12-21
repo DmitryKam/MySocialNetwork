@@ -5,7 +5,7 @@ import User from './User';
 
 
 type UsersPropsType = {
-    totalUsersCount: number
+    totalItemsCount: number
     pageSize: number
     currentPage: number
     onPageChanged: (p: number) => void
@@ -25,7 +25,7 @@ const Users = (props: UsersPropsType) => {
             onPageChanged={props.onPageChanged}
             pageSize={props.pageSize}
             currentPage={props.currentPage}
-            totalUsersCount={props.totalUsersCount}
+            totalItemsCount={props.totalItemsCount}
         />
         <div>
         {

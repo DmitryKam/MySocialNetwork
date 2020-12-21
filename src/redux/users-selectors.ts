@@ -19,7 +19,7 @@ export const pageSize = (state:RootState)=>{
 }
 
 export const totalUsersCount = (state:RootState)=>{
- return state.usersPage.totalUsersCount;
+ return state.usersPage.totalItemsCount;
 }
 
 export const currentPage = (state:RootState)=>{

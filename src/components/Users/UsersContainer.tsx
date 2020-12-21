@@ -29,7 +29,7 @@ type OwnPropsType = {}
 type mapStatePropsType = {
     users: UsersType[]
     pageSize: number
-    totalUsersCount: number
+    totalItemsCount: number
     currentPage: number
     isFetching: boolean
     followingInProgress: number[]
@@ -70,7 +70,7 @@ class UsersComponent extends React.Component<UsersPropsType, StateType> {
                 : null}
             <Users
                 {...this.props}
-                totalUsersCount={this.props.totalUsersCount}
+                totalItemsCount={this.props.totalItemsCount}
                 currentPage={this.props.currentPage}
                 pageSize={this.props.pageSize}
                 onPageChanged={this.onPageChanged}
@@ -90,7 +90,7 @@ let mapStateToProps = (state: RootState): mapStatePropsType => {
     return {
         users: getUsers(state),
         pageSize: pageSize(state),
-        totalUsersCount: totalUsersCount(state),
+        totalItemsCount: totalUsersCount(state),
         currentPage: currentPage(state),
         isFetching: getIsFetching(state),
         followingInProgress: followingInProgress(state),
