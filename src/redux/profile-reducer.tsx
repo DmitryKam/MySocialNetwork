@@ -127,7 +127,7 @@ export const deletePostAC = (id: number) => {
     } as const
 }
 
-export const setUsersProfile = (profile:any) => {
+export const setUsersProfile = (profile:ProfileType) => {
     return {
         type: SET_USERS_PROFILE,
         profile
@@ -147,7 +147,6 @@ type ThunkType = ThunkAction<void, RootState, unknown, ActionsTypes>
 export const getProfileProfileThunkCreator = (userId: string):ThunkType =>
     async (dispatch:ThunkDispatch<RootState,unknown,ActionsTypes>,getState: ()=>RootState)=>{
         let response = await usersAPI.getProfile(userId)
-
                 dispatch(setUsersProfile(response));
 
     }
