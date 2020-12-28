@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {
     getProfileProfileThunkCreator,
     getStatus,
-    ProfileType,
+    ProfileType, savePhoto, saveProfile,
     updateStatus
 } from '../../redux/profile-reducer';
 import {RootState} from '../../redux/redux-store';
@@ -28,7 +28,9 @@ type MapStatePropsType = {
 type MapDispatchPropsType = {
     getProfileProfileThunkCreator: (userId: string) => void
     getStatus: (userId: string) => void
-    updateStatus:(status: string | null) => void
+    updateStatus: (status: string | null) => void
+    savePhoto: (savePhoto: any) => void
+    saveProfile:(prifile:ProfileType)=>void
 
 }
 
@@ -39,36 +41,51 @@ export type ProfilesPropsType = RouteComponentProps<PathParamsType> & OwnPropsTy
 
 class ProfileContainer extends React.Component<ProfilesPropsType, StateType> {
 
-    componentDidMount(): void {
-        let userId = this.props.match.params.userId;
 
-        let status = this.props.status
+    refreshProfile() {
+        let userId = this.props.match.params.userId;
+        //let status = this.props.status
         if (!userId) {
             userId = String(this.props.authorizedUserId)
-            if(!userId){
-                this.props.history.push("/login")
+            if (!userId) {
+                this.props.history.push('/login')
             }
         }
         this.props.getProfileProfileThunkCreator(userId);
         this.props.getStatus(userId)
-        this.props.updateStatus(status)
+        //this.props.updateStatus(status)
 
     }
 
 
+    componentDidMount(): void {
+        this.refreshProfile()
+    }
+
+
     componentDidUpdate(prevProps: Readonly<ProfilesPropsType>, prevState: Readonly<StateType>, snapshot?: any): void {
-       if(prevProps.status !== this.props.status){
-           this.setState({
-           status: this.props.status
-       })
-       }
+
+
+        if (this.props.match.params.userId != prevProps.match.params.userId) {
+            this.refreshProfile()
+        }
+
+        if (prevProps.status !== this.props.status) {
+            this.setState({
+                status: this.props.status
+            })
+        }
+        if (prevProps.profile.photos !== this.props.profile.photos) {
+            this.refreshProfile()
+        }
     }
 
     render() {
 
 
         return (
-            <Profile {...this.props} />
+            <Profile {...this.props}
+            />
         );
     }
 }
@@ -84,7 +101,7 @@ let mapStateToProps = (state: RootState): MapStatePropsType => ({
 
 export default compose<any>(
     connect(mapStateToProps, {
-        getProfileProfileThunkCreator, getStatus, updateStatus,
+        getProfileProfileThunkCreator, getStatus, updateStatus, savePhoto,saveProfile
     }),
     withRouter,
     withAuthRedirect,

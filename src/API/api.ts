@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {ProfileType} from '../redux/profile-reducer';
+import Profile from '../components/Profile/Profile';
 
 
 
@@ -41,8 +43,33 @@ export const profileAPI = {
     },
     updateStatus(status:string){
         return instance.put(`profile/status/`,{status:status })
+    },
+    savePhoto(file:File){
+        const formData = new FormData();
+        formData.append("image",file)
+        return instance.put<savePhotoResponseType>(`/profile/photo`,formData,{
+            headers:{
+                'Content-Type':'multipart/form-data'
+            }
+        })
+    },
+    saveProfile(profile:any){
+        return instance.put<saveProfileResponseType>(`profile`, profile)
     }
+}
 
+
+
+export const autchAPI = {
+    getMe(){
+        return instance.get<MeResponseType>(`auth/me`).then(res=>res.data)
+    },
+    login(email: string, password:string, rememberMe = false){
+        return instance.post<LoginResponseType>(`auth/login`,{email, password, rememberMe}).then(res=>res.data)
+    },
+    logout(){
+        return instance.delete(`auth/login`)
+    }
 }
 
 
@@ -63,19 +90,17 @@ type LoginResponseType = {
     messages: string[]
 }
 
-
-
-export const autchAPI = {
-    getMe(){
-        return instance.get<MeResponseType>(`auth/me`).then(res=>res.data)
-    },
-    login(email: string, password:string, rememberMe = false){
-        return instance.post<LoginResponseType>(`auth/login`,{email, password, rememberMe}).then(res=>res.data)
-    },
-    logout(){
-        return instance.delete(`auth/login`)
+type savePhotoResponseType = {
+    data:{
+        small: string |null
+        large: string| null
     }
+    resultCode: number
+    messages: string[]
 }
 
-
-
+type saveProfileResponseType = {
+    data:ProfileType
+    resultCode: number
+    messages: string[]
+}

@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {authMeThunkCreator, loginTC, logoutTC} from '../../redux/auth-reducer';
 import {Redirect} from 'react-router-dom';
 import {RootState} from '../../redux/redux-store';
-import s from '../../common/FormsControls/FormsControls.module.css'
+import styles from '../../common/FormsControls/FormsControls.module.css'
 
 
 type LoginFormValuesType = {
@@ -42,7 +42,7 @@ const LoginForm: React.FC<InjectedFormProps<LoginFormValuesType> & LoginPropsOwn
         {createField('Password', 'password', [required], Input, {type: 'password'})}
         {createField(null, 'rememberMe', null, Input, {type: 'checkbox'}, 'RememberMe')}
         <div>
-            {error && <div className={s.formSummaryError}>
+            {error && <div className={styles.formSummaryError}>
                 {error}
             </div>}
         </div>

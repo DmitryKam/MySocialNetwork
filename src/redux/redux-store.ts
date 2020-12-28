@@ -1,5 +1,5 @@
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
-import profileReducer, {addPostAC, deletePostAC, setStatus, setUsersProfile} from './profile-reducer';
+import profileReducer, {addPostAC, deletePostAC, setPhotoSuccess, setStatus, setUsersProfile} from './profile-reducer';
 import dialogsReducer, {sendMessageAC} from './dialogs-reducer';
 import sidebarReducer from './sidebar-reducer';
 import usersReducer, {
@@ -12,7 +12,7 @@ import usersReducer, {
 } from './users-reducer';
 import {authReducer, setAuthUserData} from './auth-reducer';
 import thunkMiddleware from 'redux-thunk';
-import {reducer as formReducer} from 'redux-form';
+import {reducer as formReducer, stopSubmit} from 'redux-form';
 import {appReducer, initializedSuccessAC} from './app-reducer';
 
 
@@ -30,6 +30,7 @@ export type ActionsTypes = ReturnType<typeof addPostAC>
     | ReturnType<typeof setStatus>
     | ReturnType<typeof initializedSuccessAC>
     | ReturnType<typeof deletePostAC>
+    | ReturnType<typeof setPhotoSuccess>
 
 
 let reducers = combineReducers({
@@ -49,13 +50,10 @@ const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddle
 window.__store__ = store
 
 
-
 export type RootState = ReturnType<typeof reducers>
 
 export type StoreReduxType = typeof store
 //let store = createStore(reducers, applyMiddleware(thunkMiddleware));
-
-
 
 
 export default store;

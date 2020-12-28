@@ -1,21 +1,22 @@
 import React from 'react';
-import s from './Profile/Profile.module.css'
 import ProfileInfo from './ProfileInfo/ProfileInfo';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
-import {ProfileType} from '../../redux/profile-reducer';
 import {ProfilesPropsType} from './ProfileContainer';
-
 
 
 function Profile(props: ProfilesPropsType) {
 
+    let isOwner = !props.match.params.userId
     return (
         <div className={'content'}>
             <ProfileInfo
+                isOwner = {isOwner}
                 profile = {props.profile}
                 getStatus = {props.getStatus}
                 updateStatus={props.updateStatus}
                 status = {props.status}
+                savePhoto={props.savePhoto}
+                saveProfile={props.saveProfile}
 
             />
             <MyPostsContainer/>

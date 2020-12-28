@@ -19,6 +19,8 @@ const MyPosts = React.memo((props: MyPostsPropsType) => {
     console.log('Render')
     let postElement = [...props.posts].map(p => <Post key={p.id} message={p.message} likesCount={p.likesCount}/>)
 
+    //let newPostElement = React.createRef<any>();
+
     const onSubmit = (formData: AddPostFormDataType) => {
         if (formData.newMyPost) {
             props.addPosts(formData.newMyPost)

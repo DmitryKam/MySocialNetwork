@@ -2,7 +2,6 @@ import {ActionsTypes, RootState} from './redux-store';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {autchAPI} from '../API/api';
 import {FormAction, stopSubmit} from 'redux-form';
-import {type} from 'os';
 
 
 const SET_USER_DATA = 'samurai-network/auth/SET_USER_DATA';
