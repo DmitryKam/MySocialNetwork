@@ -10,7 +10,7 @@ import usersReducer, {
     toggleisFetching, toggleIsFollowingProgress,
     unFollowSuccess
 } from './users-reducer';
-import {authReducer, setAuthUserData} from './auth-reducer';
+import {authReducer, getCaptchaUrlSuccess, setAuthUserData} from './auth-reducer';
 import thunkMiddleware from 'redux-thunk';
 import {reducer as formReducer, stopSubmit} from 'redux-form';
 import {appReducer, initializedSuccessAC} from './app-reducer';
@@ -31,6 +31,7 @@ export type ActionsTypes = ReturnType<typeof addPostAC>
     | ReturnType<typeof initializedSuccessAC>
     | ReturnType<typeof deletePostAC>
     | ReturnType<typeof setPhotoSuccess>
+    | ReturnType<typeof getCaptchaUrlSuccess>
 
 
 let reducers = combineReducers({

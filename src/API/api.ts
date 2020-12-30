@@ -1,6 +1,5 @@
 import axios from 'axios';
-import {ProfileType} from '../redux/profile-reducer';
-import Profile from '../components/Profile/Profile';
+import {ProfileType} from '../redux/profile-reducer';;
 
 
 
@@ -64,11 +63,18 @@ export const autchAPI = {
     getMe(){
         return instance.get<MeResponseType>(`auth/me`).then(res=>res.data)
     },
-    login(email: string, password:string, rememberMe = false){
-        return instance.post<LoginResponseType>(`auth/login`,{email, password, rememberMe}).then(res=>res.data)
+    login(email: string, password:string, rememberMe = false,captcha:null|string){
+        debugger;
+        return instance.post<LoginResponseType>(`auth/login`,{email, password, rememberMe,captcha}).then(res=>res.data)
     },
     logout(){
         return instance.delete(`auth/login`)
+    }
+}
+
+export const securityAPI = {
+    getCapchaUrl (){
+        return instance.get<SecurityResponceType>('security/get-captcha-url').then(res=>res.data)
     }
 }
 
@@ -76,7 +82,7 @@ export const autchAPI = {
 
 
 type MeResponseType = {
-    data: {id: number, email:string, login:string}
+    data: { id: number, email:string, login:string }
     resultCode: number
     messages: string[]
 }
@@ -103,4 +109,8 @@ type saveProfileResponseType = {
     data:ProfileType
     resultCode: number
     messages: string[]
+}
+
+type SecurityResponceType = {
+    url:string
 }
