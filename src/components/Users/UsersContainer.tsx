@@ -1,33 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {RootState} from '../../redux/redux-store';
-import {
-    setCurrentPage,
-    followSuccess,
-    unFollowSuccess,
-    UsersType,
-    toggleIsFollowingProgress,
-    requestUsersThunkCreater, deleteFollowThunkCreater, toggleFollowingThunkCreater
-}
-    from '../../redux/users-reducer';
+
+import {AppStateType} from '../../redux/redux-store';
 import Users from './Users';
 import Preloader from '../../common/Preloader/Preloader';
-import {compose} from 'redux';
 import {
     currentPage,
     followingInProgress,
-    getUsers,
-    getIsFetching,
+    getIsFetching, getUserSuper,
     pageSize,
     totalUsersCount
 } from '../../redux/users-selectors';
+import {
+    deleteFollowThunkCreater,
+    followSuccess,
+    requestUsersThunkCreater,
+    setCurrentPage,
+    toggleFollowingThunkCreater,
+    toggleIsFollowingProgress,
+    unFollowSuccess,
+    UserType
+} from '../../redux/users-reducer';
 
-type StateType = {}
-
-type OwnPropsType = {}
 
 type mapStatePropsType = {
-    users: UsersType[]
+    users: UserType[]
     pageSize: number
     totalItemsCount: number
     currentPage: number
@@ -40,55 +38,55 @@ type mapDispatchPropsType = {
     unFollow: (userId: number) => void
     setCurrentPage: (currentPage: number) => void
     toggleIsFollowingProgress: (followingInProgress: boolean, id: number) => void
-    getUsersThunkCreater: (currentPage: any, pageSize: any) => void
-    deleteFollowThunkCreater:(id:number)=>void
-    toggleFollowingThunkCreater:(id:number)=>void
+    getUsersThunkCreater: (currentPage: number, pageSize: number) => void
+    deleteFollowThunkCreater: (id: number) => void
+    toggleFollowingThunkCreater: (id: number) => void
 
 }
 
-
-export type UsersPropsType = OwnPropsType & mapStatePropsType & mapDispatchPropsType
-
-class UsersComponent extends React.Component<UsersPropsType, StateType> {
-
-    componentDidMount(): void {
-        const {currentPage,pageSize} = this.props
-        this.props.getUsersThunkCreater(currentPage, pageSize);
-
-    }
-
-    onPageChanged = (pageNumber: number) => {
-        const {pageSize}= this.props
-        this.props.getUsersThunkCreater(pageNumber, pageSize);
-    }
-
-
-    render() {
-        return <>
-            {this.props.isFetching
-                ? <Preloader/>
-                : null}
-            <Users
-                {...this.props}
-                totalItemsCount={this.props.totalItemsCount}
-                currentPage={this.props.currentPage}
-                pageSize={this.props.pageSize}
-                onPageChanged={this.onPageChanged}
-                users={this.props.users}
-                followingInProgress={this.props.followingInProgress}
-                deleteFollowThunkCreater={this.props.deleteFollowThunkCreater}
-                toggleFollowingThunkCreater={this.props.toggleFollowingThunkCreater}
-            />
-        </>
-
-    }
-
+type OwnPropsType = {
+    pageTitle: string
 }
 
+export type UsersPropsType =  mapStatePropsType & mapDispatchPropsType & OwnPropsType
 
-let mapStateToProps = (state: RootState): mapStatePropsType => {
+const UsersComponent: React.FC<UsersPropsType> = React.memo(({...props}) => {
+
+    useEffect(() => {
+
+        props.getUsersThunkCreater(props.currentPage, props.pageSize)
+
+    }, [])
+
+
+    const onPageChanged = (pageNumber: number) => {
+
+        props.getUsersThunkCreater(pageNumber, props.pageSize);
+    }
+
+    return <>
+
+        {props.isFetching ? <Preloader/> : null}
+
+        <Users
+            {...props}
+            totalItemsCount={props.totalItemsCount}
+            currentPage={props.currentPage}
+            pageSize={props.pageSize}
+            onPageChanged={onPageChanged}
+            users={props.users}
+            followingInProgress={props.followingInProgress}
+            deleteFollowThunkCreater={props.deleteFollowThunkCreater}
+            toggleFollowingThunkCreater={props.toggleFollowingThunkCreater}
+        />
+    </>
+
+})
+
+
+const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
-        users: getUsers(state),
+        users: getUserSuper(state),
         pageSize: pageSize(state),
         totalItemsCount: totalUsersCount(state),
         currentPage: currentPage(state),
@@ -98,9 +96,13 @@ let mapStateToProps = (state: RootState): mapStatePropsType => {
 }
 
 
-export default compose(
-    connect<mapStatePropsType, mapDispatchPropsType, OwnPropsType, RootState>(mapStateToProps, {
-        follow: followSuccess, unFollow: unFollowSuccess, setCurrentPage,
-        toggleIsFollowingProgress, getUsersThunkCreater: requestUsersThunkCreater, deleteFollowThunkCreater,
-        toggleFollowingThunkCreater})
-    ) (UsersComponent);
+export default compose<React.ComponentType>(
+    connect<mapStatePropsType, mapDispatchPropsType, {}, AppStateType>(mapStateToProps, {
+        follow: followSuccess,
+        unFollow: unFollowSuccess,
+        getUsersThunkCreater: requestUsersThunkCreater,
+        setCurrentPage,
+        toggleIsFollowingProgress,
+        deleteFollowThunkCreater,
+        toggleFollowingThunkCreater
+    }))(UsersComponent);

@@ -1,4 +1,7 @@
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import {reducer as formReducer} from 'redux-form';
+
 import profileReducer, {addPostAC, deletePostAC, setPhotoSuccess, setStatus, setUsersProfile} from './profile-reducer';
 import dialogsReducer, {sendMessageAC} from './dialogs-reducer';
 import sidebarReducer from './sidebar-reducer';
@@ -11,9 +14,8 @@ import usersReducer, {
     unFollowSuccess
 } from './users-reducer';
 import {authReducer, getCaptchaUrlSuccess, setAuthUserData} from './auth-reducer';
-import thunkMiddleware from 'redux-thunk';
-import {reducer as formReducer, stopSubmit} from 'redux-form';
 import {appReducer, initializedSuccessAC} from './app-reducer';
+
 
 
 export type ActionsTypes = ReturnType<typeof addPostAC>
@@ -34,7 +36,7 @@ export type ActionsTypes = ReturnType<typeof addPostAC>
     | ReturnType<typeof getCaptchaUrlSuccess>
 
 
-let reducers = combineReducers({
+let rootReducer = combineReducers({
     profilePage: profileReducer,
     dialogPage: dialogsReducer,
     usersPage: usersReducer,
@@ -44,18 +46,15 @@ let reducers = combineReducers({
     app: appReducer
 });
 
+type RootReducerType = typeof rootReducer;
+export type AppStateType = ReturnType<RootReducerType>
+
 // @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));
+
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunkMiddleware)));
 // @ts-ignore
 window.__store__ = store
-
-
-export type RootState = ReturnType<typeof reducers>
-
-export type StoreReduxType = typeof store
-//let store = createStore(reducers, applyMiddleware(thunkMiddleware));
-
 
 export default store;
 

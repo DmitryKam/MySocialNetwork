@@ -1,27 +1,25 @@
 import React from 'react';
-import s from './Header.module.css';
-import {NavLink} from 'react-router-dom';
-import {HeadersPropsType} from './HeaderContainer';
+import { NavLink } from 'react-router-dom';
 
-type HeaderPropsType = {
-    isAuth:boolean
-    login:string
-    logoutTC: ()=>void
-}
+import styles from './Header.module.css';
+import { HeadersPropsType } from './HeaderContainer';
+import {useSelector} from 'react-redux';
+import {AppStateType} from '../../redux/redux-store';
 
 
-function Header(props:HeadersPropsType) {
-
+ const Header = React.memo(function(props:HeadersPropsType) {
+const avatar = useSelector<AppStateType,string|null>(state => state.profilePage.profile.photos.small)
     return(
-        <header className={s.header}>
-            <img src={'https://d2pye4zfc3qqup.cloudfront.net/wp-content/uploads/2016/11/10100802/Header-Immage-Moon-Rover.png'}/>
-            <div className={s.loginBlock}>
-            {props.isAuth
-                ? <div>{props.login} - <button onClick={props.logoutTC}>Logout</button></div>
-                :<NavLink to={'/login'}>Login</NavLink>}
+        <header className={ styles.header }>
+                <img src= {`${avatar}`} alt={'avatar'}/>
+            <div className={ styles.loginBlock }>
+
+            { props.isAuth
+                ? <div>{ props.login } - <button onClick={ props.logoutTC }>Logout</button></div>
+                :<NavLink to={'/login'}> Login </NavLink> }
         </div>
         </header>
     );
-}
+})
 
 export default Header;

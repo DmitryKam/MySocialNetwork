@@ -2,17 +2,19 @@ import React, {ChangeEvent, useState} from 'react';
 
 import styles from './ProfileInfo.module.css'
 import Preloader from '../../../common/Preloader/Preloader';
-import {ProfileType} from '../../../redux/profile-reducer';
+import {ContactsType, ProfileType} from '../../../redux/profile-reducer';
 import profPhoto from '../../../assets/images/user.png';
-import ProfileDataFormReduxForm from '../ProfileDataForm';
-import ProfileStatusWithHooks from './ProfileStatusWithHooks';
+import ProfileStatus from './ProfileStatus';
+import { ProfileDataEditForm } from '../ProfileDataForm';
+
+
 
 
 type ProfileInfoPropsType = {
     profile: ProfileType
     getStatus: (userId: string) => void
     updateStatus: (status: string | null) => void
-    savePhoto: (savePhoto: any) => void
+    savePhoto: (savePhoto: File) => void
     status: string | null
     isOwner: boolean
     saveProfile: (pfofile: ProfileType) => void
@@ -36,14 +38,8 @@ const ProfileInfo:React.FC<ProfileInfoPropsType> = ({profile, status, updateStat
         }
     };
 
-    const onSubmit = (formData: ProfileType) => {
-        //@ts-ignore
-        saveProfile(formData).then(()=>{
-            setEditMode(false)
-            }
-        );
 
-    }
+
 
     return (<div>
 
@@ -52,18 +48,17 @@ const ProfileInfo:React.FC<ProfileInfoPropsType> = ({profile, status, updateStat
                 {isOwner && <input type={'file'} onChange={onMyPhotoSelected}/>}
 
                 {editMode
-                    ? <ProfileDataFormReduxForm initialValues={profile} isOwner={isOwner}
-                                                profile={profile} onSubmit={onSubmit}/>
+                     ? <ProfileDataEditForm isOwner={isOwner}
+                                                 profile={profile} onSubmit={setEditMode}/>
                     : <ProfileData
                         profile={profile}
                         isOwner={isOwner}
                         goToEditMode={() => setEditMode(true)}
                     />}
 
-
             </div>
             <div>
-                <ProfileStatusWithHooks {...props} status={status} updateStatus={updateStatus}/>
+                <ProfileStatus {...props} status={status} updateStatus={updateStatus}/>
             </div>
 
         </div>
@@ -84,7 +79,7 @@ type ProfileDataType = {
     goToEditMode: () => void
 }
 
-const ProfileData = (props: ProfileDataType) => {
+const ProfileData = React.memo((props: ProfileDataType) => {
     return <div>
         {props.isOwner && <div>
             <button onClick={props.goToEditMode}>edit</button>
@@ -107,15 +102,14 @@ const ProfileData = (props: ProfileDataType) => {
         <div>
             <b>Contacts:</b> {Object.keys(props.profile.contacts).map((key) => {
 
-            // @ts-ignore
-            return <Contact key={key} contactTitle={key} contactValue={props.profile.contacts[key]}/>
+
+            return <Contact key={ key } contactTitle={ key } contactValue={ props.profile.contacts[key as keyof ContactsType] }/>
         })}
         </div>
     </div>
-}
+})
 
 
-export const Contact = (props: ContactPropsType) => {
+export const Contact = React.memo((props: ContactPropsType) => {
     return <div className={styles.contact}><b>{props.contactTitle}</b>: {props.contactValue} </div>
-
-}
+})

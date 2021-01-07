@@ -1,12 +1,13 @@
-import React, {Dispatch} from 'react';
-import store, {ActionsTypes} from '../../../redux/redux-store';
+import {Dispatch} from 'react';
+
+import {ActionsTypes} from '../../../redux/redux-store';
 import {addPostAC} from '../../../redux/profile-reducer';
 import MyPosts from './MyPosts';
-import {RootState} from '../../../redux/redux-store';
+import {AppStateType} from '../../../redux/redux-store';
 import {connect} from 'react-redux';
 
 
-let mapStateToProps = (state: RootState) => {
+let mapStateToProps = (state: AppStateType) => {
     return {
         posts: state.profilePage.posts,
     }

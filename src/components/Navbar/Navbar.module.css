@@ -1,6 +1,7 @@
 .nav {
-    grid-area: n;
+    width: 150px;
     background-color: lightsalmon;
+    padding: 10px;
 }
 
 .item a{
@@ -10,13 +11,4 @@
 
 .item a.active{
     color: goldenrod;
-}
-
-.friends {
-    width: 70px;
-    margin-top: 20px;
-    text-align: center;
-    padding: 4px;
-    color: tomato;
-    border: 1px solid sienna;
 }

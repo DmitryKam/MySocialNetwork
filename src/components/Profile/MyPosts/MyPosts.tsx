@@ -1,71 +1,65 @@
 import React from 'react';
-import s from './MyPosts.module.css';
+
+import styles from './MyPosts.module.css';
 import Post from './Post/Post';
-import {PostType} from '../../../redux/profile-reducer';
-import {Field, InjectedFormProps, reduxForm} from 'redux-form';
+import {addPostAC, PostType} from '../../../redux/profile-reducer';
 import {maxLengthCreator, required} from '../../../utils/validators/validators';
-import {Textarea} from '../../../common/FormsControls/FormsControls';
+import {Form, FormikHelpers, useFormik } from 'formik';
 
 
 type MyPostsPropsType = {
     posts: Array<PostType>
     addPosts: (text: string) => void
-
 }
 
 
 const MyPosts = React.memo((props: MyPostsPropsType) => {
 
-    console.log('Render')
-    let postElement = [...props.posts].map(p => <Post key={p.id} message={p.message} likesCount={p.likesCount}/>)
+    console.log('My Post Render')
 
-    //let newPostElement = React.createRef<any>();
+    const postElement = [...props.posts].map(p => <Post key={p.id} message={p.message} likesCount={p.likesCount}/>)
 
-    const onSubmit = (formData: AddPostFormDataType) => {
-        if (formData.newMyPost) {
-            props.addPosts(formData.newMyPost)
+    const formik = useFormik({
+        validate: (values) => {
+            if (!values) {
+                return {
+                    post: 'Post is required'
+                }
+            }
+        },
+        initialValues: {
+            post: '',
+
+        },
+        onSubmit: (values)=>{
+            props.addPosts(values.post)
         }
-    }
+    })
 
-    return (<div className={s.postsBock}>
+
+    return <div className={styles.postsBock}>
             my posts
             <div>
-                <AddPostReduxForm onSubmit={onSubmit}/>
+                <form onSubmit={formik.handleSubmit}>
+                    <label htmlFor={'post'}/>
+                    <input
+                        type="post"
+                        name="post"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.post}
+                    />
+                    <button>add post</button>
+                </form>
             </div>
-            <div className={s.posts}>
+            <div className={styles.posts}>
                 {postElement}
             </div>
         </div>
-    );
-});
+
+})
 
 
-
-
-type AddPostFormDataType = {
-    newMyPost: string
-}
-const maxLength = maxLengthCreator(10);
-
-const AddNewPostForm: React.FC<InjectedFormProps<AddPostFormDataType>> = (props) => {
-
-
-
-    return <form onSubmit={props.handleSubmit}>
-        <div>
-            <Field
-                component={Textarea}
-                name={'newMyPost'}
-                placeholder="Enter your message"
-                validate = {[required,maxLength]}/>
-        </div>
-        <div>
-            <button>Add posts</button>
-        </div>
-    </form>
-}
-
-let AddPostReduxForm = reduxForm<AddPostFormDataType>({form: 'profileAddNewPostForm'})(AddNewPostForm)
 
 
 export default MyPosts;

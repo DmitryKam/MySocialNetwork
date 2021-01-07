@@ -1,8 +1,6 @@
 import React, {DetailedHTMLProps, TextareaHTMLAttributes} from 'react';
-import {Simulate} from 'react-dom/test-utils';
 import s from './FormsControls.module.css'
 import {Field, WrappedFieldProps} from 'redux-form';
-import {required} from '../../utils/validators/validators';
 
 type DefaultTextareaPropsType = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>
 

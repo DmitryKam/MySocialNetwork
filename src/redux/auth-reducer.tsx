@@ -1,7 +1,10 @@
-import {ActionsTypes, RootState} from './redux-store';
+import {ActionsTypes, AppStateType} from './redux-store';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {autchAPI, securityAPI} from '../API/api';
+
 import {FormAction, stopSubmit} from 'redux-form';
+import {autchAPI} from '../API/auth-api';
+import {securityAPI} from '../API/security-api';
+import {ResultCodesEnum} from '../API/api';
 
 
 const SET_USER_DATA = 'samurai-network/auth/SET_USER_DATA';
@@ -38,32 +41,25 @@ let initialState: AuthType = {
 export const authReducer = (state: AuthType = initialState, action: ActionsTypes): AuthType => {
     switch (action.type) {
         case SET_USER_DATA: {
-            debugger
             return {
-
                 ...state,
                 data: {
                     ...state.data,
                     ...action.payload,
-
                 }
             }
         }
         case 'GET-CAPTCHA-URL-SUCCESS':{
-           debugger
             return {
                 ...state,
                 data:{
                     ...state.data,
                     captchaUrl: action.payload.captchaUrl
                 }
-
             }
         }
-
         default:
             return state;
-
     }
 }
 
@@ -88,12 +84,12 @@ export const getCaptchaUrlSuccess = (captchaUrl: string) => ({
 } as const)
 
 
-type ThunkType = ThunkAction<void, RootState, unknown, ActionsTypes | FormAction>
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes | FormAction>
 
-export const authMeThunkCreator = (): ThunkType => async (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
+export const authMeThunkCreator = (): ThunkType => async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsTypes>, getState: () => AppStateType) => {
     let response = await autchAPI.getMe()
 
-    if (response.resultCode === 0) {
+    if (response.resultCode === ResultCodesEnum.Success) {
         let {id, email, login} = response.data;
         dispatch(setAuthUserData(id, email, login, true));
     }
@@ -101,14 +97,14 @@ export const authMeThunkCreator = (): ThunkType => async (dispatch: ThunkDispatc
 
 
 export const loginTC = (email: string, password: string, rememberMe: boolean,captchaUrl:string|null): ThunkType =>
-    async (dispatch, getState: () => RootState) => {
+    async (dispatch, getState: () => AppStateType) => {
         let response = await autchAPI.login(email, password, rememberMe,captchaUrl)
-        if (response.resultCode === 0) {
+        if (response.resultCode === ResultCodesEnum.Success) {
             // success, get auth data
             dispatch(authMeThunkCreator());
             debugger
         } else {
-            if (response.resultCode === 10) {
+            if (response.resultCode === ResultCodesEnum.CaptchaIsRequired) {
                 debugger
                 dispatch(getCaptchaUrl())
             }
@@ -118,17 +114,17 @@ export const loginTC = (email: string, password: string, rememberMe: boolean,cap
     }
 
 export const getCaptchaUrl = (): ThunkType =>
-    async (dispatch, getState: () => RootState) => {
+    async (dispatch, getState: () => AppStateType) => {
         const response = await securityAPI.getCapchaUrl();
         const captchaUrl = response.url
         dispatch(getCaptchaUrlSuccess(captchaUrl));
     }
 
-export const logoutTC = (): ThunkType =>
-    async (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
-        let response = await autchAPI.logout()
 
-        if (response.data.resultCode === 0) {
+export const logoutTC = (): ThunkType =>
+    async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsTypes>, getState: () => AppStateType) => {
+        let response = await autchAPI.logout()
+        if (response.data.resultCode === ResultCodesEnum.Success) {
             dispatch(setAuthUserData(null, null, null, false));
         }
 

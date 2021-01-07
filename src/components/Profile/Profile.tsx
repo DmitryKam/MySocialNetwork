@@ -4,8 +4,8 @@ import MyPostsContainer from './MyPosts/MyPostsContainer';
 import {ProfilesPropsType} from './ProfileContainer';
 
 
-function Profile(props: ProfilesPropsType) {
-
+const Profile = React.memo((props: ProfilesPropsType)=>{
+console.log("Profile Renderer")
     let isOwner = !props.match.params.userId
     return (
         <div className={'content'}>
@@ -22,6 +22,6 @@ function Profile(props: ProfilesPropsType) {
             <MyPostsContainer/>
         </div>
     );
-}
+})
 
 export default Profile;

@@ -1,7 +1,12 @@
-import {ActionsTypes, RootState} from './redux-store';
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {profileAPI, usersAPI} from '../API/api';
 import {stopSubmit} from 'redux-form';
+
+import {ActionsTypes, AppStateType} from './redux-store';
+import {ThunkAction, ThunkDispatch} from 'redux-thunk';
+
+import {profileAPI} from '../API/profile-api';
+import {usersAPI} from '../API/user-api';
+import {ResultCodesEnum} from '../API/api';
+
 
 const ADD_POST = 'ADD-POST';
 const SET_USERS_PROFILE = 'SET_USERS_PROFILE';
@@ -17,17 +22,17 @@ export type PostType = {
 }
 
 export type ContactsType = {
-    github: string | null
-    vk: string | null
-    facebook: string | null
-    instagram: string | null
-    twitter: string | null
-    website: string | null
-    youtube: string | null
-    mainLink: string | null
+    github: string
+    vk: string
+    facebook: string
+    instagram: string
+    twitter: string
+    website: string
+    youtube: string
+    mainLink: string
 }
 
-type PhotosType = {   // Dublicte from users-reducer
+export type PhotosType = {
     small: string | null
     large: string | null
 }
@@ -161,45 +166,51 @@ export const setStatus = (status: string) => {
     } as const
 }
 
-type ThunkType = ThunkAction<void, RootState, unknown, ActionsTypes>
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>
 
-export const getProfileProfileThunkCreator = (userId: string): ThunkType =>
-    async (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
+
+export const getProfileProfileThunkCreator = (userId: string): ThunkType => async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsTypes>, getState: () => AppStateType) => {
         let response = await usersAPI.getProfile(userId)
         dispatch(setUsersProfile(response));
 
     }
 
 
-export const getStatus = (userId: string): ThunkType => async (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
+export const getStatus = (userId: string): ThunkType => async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsTypes>, getState: () => AppStateType) => {
     let response = await profileAPI.getStatus(userId)
 
-    dispatch(setStatus(response.data))
+    dispatch(setStatus(response))
 
 }
 
-export const updateStatus = (status: string): ThunkType => async (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
-    const response = await profileAPI.updateStatus(status)
+export const updateStatus = (status: string): ThunkType => async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsTypes>, getState: () => AppStateType) => {
 
-    if (response.data.resultCode === 0) {
-        dispatch(setStatus(status))
-    }
+   try{
+       const response = await profileAPI.updateStatus(status)
+
+       if (response.resultCode === ResultCodesEnum.Success) {
+           dispatch(setStatus(status))
+       }
+   }catch (e) {
+        console.log(e)
+   }
 
 }
 
-export const savePhoto = (photoFile: File): ThunkType => async (dispatch: ThunkDispatch<RootState, unknown, ActionsTypes>, getState: () => RootState) => {
-    const response = await profileAPI.savePhoto(photoFile)
+export const savePhoto = (photoFile: File): ThunkType => async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsTypes>, getState: () => AppStateType) => {
+    const data = await profileAPI.savePhoto(photoFile)
 
-    if (response.data.resultCode === 0) {
-        dispatch(setPhotoSuccess(response.data.data))
+    if (data.resultCode === ResultCodesEnum.Success) {
+        dispatch(setPhotoSuccess(data.data.photos))
     }
 }
 
 export const saveProfile = (profile: ProfileType): ThunkType =>
-    async (dispatch: ThunkDispatch<RootState, unknown, any>, getState: () => RootState) => {
-        const userId = getState().auth.data.id
+    async (dispatch: ThunkDispatch<AppStateType, unknown, any>, getState: () => AppStateType) => {
+    const userId = getState().auth.data.id
+        debugger;
         const response = await profileAPI.saveProfile({...profile})
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === ResultCodesEnum.Success) {
             dispatch(getProfileProfileThunkCreator(String(userId)))
         } else {
             let message = response.data.messages.length > 0 ? response.data.messages[0] : 'Some error';
