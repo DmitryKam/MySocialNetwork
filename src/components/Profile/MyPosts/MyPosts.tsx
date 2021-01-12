@@ -1,10 +1,11 @@
 import React from 'react';
+import {useFormik} from 'formik';
 
 import styles from './MyPosts.module.css';
 import Post from './Post/Post';
-import {addPostAC, PostType} from '../../../redux/profile-reducer';
-import {maxLengthCreator, required} from '../../../utils/validators/validators';
-import {Form, FormikHelpers, useFormik } from 'formik';
+import {PostType} from '../../../redux/profile-reducer';
+import {useDispatch} from 'react-redux';
+
 
 
 type MyPostsPropsType = {
@@ -16,6 +17,8 @@ type MyPostsPropsType = {
 const MyPosts = React.memo((props: MyPostsPropsType) => {
 
     console.log('My Post Render')
+
+    const dispatch = useDispatch();
 
     const postElement = [...props.posts].map(p => <Post key={p.id} message={p.message} likesCount={p.likesCount}/>)
 
@@ -32,7 +35,7 @@ const MyPosts = React.memo((props: MyPostsPropsType) => {
 
         },
         onSubmit: (values)=>{
-            props.addPosts(values.post)
+            dispatch(props.addPosts(values.post));
         }
     })
 

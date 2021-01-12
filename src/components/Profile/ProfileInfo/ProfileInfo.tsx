@@ -1,64 +1,71 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 
 import styles from './ProfileInfo.module.css'
 import Preloader from '../../../common/Preloader/Preloader';
 import {ContactsType, ProfileType} from '../../../redux/profile-reducer';
 import profPhoto from '../../../assets/images/user.png';
 import ProfileStatus from './ProfileStatus';
-import { ProfileDataEditForm } from '../ProfileDataForm';
-
-
+import {ProfileDataEditForm} from '../ProfileDataForm';
+import {useDispatch} from 'react-redux';
 
 
 type ProfileInfoPropsType = {
     profile: ProfileType
-    getStatus: (userId: string) => void
-    updateStatus: (status: string | null) => void
-    savePhoto: (savePhoto: File) => void
     status: string | null
+    paramsUserId: string
     isOwner: boolean
+
+    getStatus: (userId: string | null) => void
+    updateStatus: (status: string) => void
+    savePhoto: (savePhoto: File) => void
     saveProfile: (pfofile: ProfileType) => void
+    refreshProfile: ()=>void
 }
 
 
-const ProfileInfo:React.FC<ProfileInfoPropsType> = ({profile, status, updateStatus, isOwner, savePhoto, saveProfile,...props})=> {
+const ProfileInfo:React.FC<ProfileInfoPropsType> = ({profile, status, updateStatus, isOwner,paramsUserId, savePhoto, saveProfile,getStatus,refreshProfile, ...props})=> {
+
     const [editMode, setEditMode] = useState(false)
+
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(refreshProfile);
+    },[dispatch])
+
 
     if (!profile) {
         return <Preloader/>
     }
 
 
+
     const onMyPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
 
-
-//e.target.files.length
         if (e.target.files && e.target.files.length) {
-            savePhoto(e.target.files[0]);
+            debugger;
+            dispatch(savePhoto(e.target.files[0]));
         }
     };
-
-
 
 
     return (<div>
 
             <div className={styles.descriptionblock}>
                 <img src={profile.photos.large || profPhoto} className={styles.mainPhoto}/>
-                {isOwner && <input type={'file'} onChange={onMyPhotoSelected}/>}
-
-                {editMode
+                { isOwner && <input type={'file'} onChange={onMyPhotoSelected}/> }
+                { editMode
                      ? <ProfileDataEditForm isOwner={isOwner}
                                                  profile={profile} onSubmit={setEditMode}/>
                     : <ProfileData
                         profile={profile}
                         isOwner={isOwner}
                         goToEditMode={() => setEditMode(true)}
-                    />}
+                    /> }
 
             </div>
             <div>
-                <ProfileStatus {...props} status={status} updateStatus={updateStatus}/>
+                <ProfileStatus {...props} status={status} updateStatus={updateStatus} getStatus={getStatus}/>
             </div>
 
         </div>

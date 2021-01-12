@@ -176,7 +176,7 @@ export const getProfileProfileThunkCreator = (userId: string): ThunkType => asyn
     }
 
 
-export const getStatus = (userId: string): ThunkType => async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsTypes>, getState: () => AppStateType) => {
+export const getStatus = (userId: string | null): ThunkType => async (dispatch: ThunkDispatch<AppStateType, unknown, ActionsTypes>, getState: () => AppStateType) => {
     let response = await profileAPI.getStatus(userId)
 
     dispatch(setStatus(response))

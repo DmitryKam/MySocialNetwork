@@ -1,22 +1,24 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 
 type ProfileStatusPropsType = {
     status: string | null
-    getStatus: (userId: string) => void
-    updateStatus:(status: string | null) => void
+    getStatus: (userId: string | null) => void
+    updateStatus:(status: string) => void
 }
 
 
-const ProfileStatus =(props:ProfileStatusPropsType) => {
+const ProfileStatus = React.memo((props:ProfileStatusPropsType) => {
 
+const dispatch = useDispatch();
 
-//const status = useSelector<RootState>(state =>state.profilePage.status)
 const [editMode, setEditMode] = useState<boolean>(false)
 const [status, setStatus] = useState<string| null>(props.status)
 
     useEffect(()=>{
-        setStatus(props.status)
+            setStatus(props.status)
+
     },[props.status])
 
     const activateEditMode = ()=>{
@@ -25,7 +27,9 @@ const [status, setStatus] = useState<string| null>(props.status)
 
     const deactivateEditMode = ()=>{
     setEditMode(false)
-        props.updateStatus(status)
+       if(status){
+        dispatch(props.updateStatus(status));
+    }
     }
     const onStatusChange = (e:ChangeEvent<HTMLInputElement>)=>{
         setStatus(e.currentTarget.value)
@@ -49,6 +53,6 @@ const [status, setStatus] = useState<string| null>(props.status)
                 }
             </div>
         )
-}
+})
 
 export default ProfileStatus;

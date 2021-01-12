@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
+import React, {useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 
 
@@ -11,7 +11,6 @@ import {compose} from 'redux';
 import {
     getProfileProfileThunkCreator,
     getStatus,
-    ProfileType,
     savePhoto,
     saveProfile,
     updateStatus
@@ -23,71 +22,44 @@ type PathParamsType = {
 
 }
 
-type StateType = {}
 
-type MapStatePropsType = {
-    profile: ProfileType
-    isAuth: boolean
-    status: string | null
-    authorizedUserId: number | null
-}
-type MapDispatchPropsType = {
-    getProfileProfileThunkCreator: (userId: string) => void
-    getStatus: (userId: string) => void
-    updateStatus: (status: string | null) => void
-    savePhoto: (savePhoto: any) => void
-    saveProfile: (prifile: ProfileType) => void
-
-}
-
-type OwnPropsType = MapStatePropsType & MapDispatchPropsType
-
-export type ProfilesPropsType = RouteComponentProps<PathParamsType> & OwnPropsType
+export type ProfilesPropsType = RouteComponentProps<PathParamsType>
 
 
 const ProfileContainer = React.memo((props: ProfilesPropsType) => {
 
-    console.log('Profile container Renderer');
+    const { profile,status }= useSelector((state:AppStateType) => state.profilePage)
+    const { id }= useSelector((state:AppStateType) => state.auth.data)
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        refreshProfile();
 
-    }, [ props.match.params.userId,  props.profile.photos.small])
-    // props.match.params.userId, props.profile.photos, props.status, props.authorizedUserId]
 
-    const refreshProfile = () => {
+    const refreshProfile = useCallback(() => {
         let userId = props.match.params.userId
-        //const status = props.status;
-
         if (!userId) {
-            userId = String(props.authorizedUserId)
+            userId = String(id)
             if (!userId) props.history.push('/login')
         }
-        props.getProfileProfileThunkCreator(userId)
-        props.getStatus(userId)
-        //props.updateStatus(status)
-    }
+        dispatch(getProfileProfileThunkCreator(userId))
+        dispatch(getStatus(userId))
+    },[id,props.history,props.match.params.userId,dispatch])
 
 
     return (
-        <Profile {...props}
+        <Profile
+            profile={profile}
+            ParamsUserId={props.match.params.userId}
+            status={status}
+            getStatus={getStatus}
+            updateStatus={updateStatus}
+            saveProfile={saveProfile}
+            savePhoto={savePhoto}
+            refreshProfile = {refreshProfile}
+
+
+
         />
     );
 })
 
-let mapStateToProps = (state: AppStateType): MapStatePropsType => ({
-    profile: state.profilePage.profile,
-    isAuth: state.auth.data.isAuth,
-    status: state.profilePage.status,
-    authorizedUserId: state.auth.data.id
-
-})
-
-
-export default compose<React.ComponentType<any>>(
-    connect(mapStateToProps, {
-        getProfileProfileThunkCreator, getStatus, updateStatus, savePhoto, saveProfile
-    }),
-    withRouter,
-    withAuthRedirect,
-)(ProfileContainer)
+export default compose<React.ComponentType<any>>(withRouter,withAuthRedirect)(ProfileContainer)
